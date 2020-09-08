@@ -1,17 +1,52 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div ref="container">
+        <!-- @progress="onProgress($event)"
+        @hasStartedGeneration="hasStartedGeneration()"
+        @hasGenerated="hasGenerated($event)" -->
+      <vue-html2pdf
+        :show-layout="false"
+        :enable-download="false"
+        :preview-modal="true"
+        :paginate-elements-by-height="1400"
+        filename="test"
+        :pdf-quality="2"
+        :manual-pagination="false"
+        pdf-format="a4"
+        pdf-orientation="portrait"
+        pdf-content-width="800px"
+        ref="html2Pdf"
+      >
+        <template #pdf-content>
+            <!-- PDF Content Here -->
+            <p>{{ title }}</p>
+        </template>
+
+    </vue-html2pdf>
+    <input type="text" name="Numero Devis" id="number" v-model="title">
+    <button @click="generateReport">Download</button>  
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+
+import VueHtml2pdf from 'vue-html2pdf'
 
 export default {
   name: 'App',
+  data() {
+    return {
+      title: ''
+    }
+  },
   components: {
-    HelloWorld
+    VueHtml2pdf
+  },
+  methods: {
+    generateReport () {
+      this.$refs.html2Pdf.generatePdf()
+    }
   }
 }
 </script>
