@@ -1,0 +1,9 @@
+{
+    "types": ["facture", "devis"],
+    "facture": {
+        "number": 155
+    },
+    "devis": {
+        "number": 172
+    }
+}

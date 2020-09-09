@@ -19,29 +19,35 @@
       >
         <template #pdf-content>
             <!-- PDF Content Here -->
-            <p>{{ title }}</p>
+            <pdf-content :content="content"></pdf-content>
+            <!-- <p>{{content.title}}</p> -->
         </template>
 
     </vue-html2pdf>
-    <input type="text" name="Numero Devis" id="number" v-model="title">
+    <creator-form :content="content"></creator-form>
     <button @click="generateReport">Download</button>  
     </div>
   </div>
 </template>
 
 <script>
-
 import VueHtml2pdf from 'vue-html2pdf'
+import PdfContent from './components/PdfContent'
+import CreatorForm from './components/CreatorForm'
 
 export default {
   name: 'App',
   data() {
     return {
-      title: ''
+      content: {
+        title: 'devis'
+      }
     }
   },
   components: {
-    VueHtml2pdf
+    VueHtml2pdf,
+    PdfContent,
+    CreatorForm
   },
   methods: {
     generateReport () {
@@ -56,8 +62,8 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+  padding: 50px;
 }
 </style>
