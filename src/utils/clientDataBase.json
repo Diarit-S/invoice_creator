@@ -1,0 +1,17 @@
+[
+    {
+        "fullName": "Alex Dupond",
+        "address": "27, rue du grenier",
+        "zipAndCity": "75010 Paris"
+    },
+    {
+        "fullName": "Jean De Lafontaine",
+        "address": "112, rue Paul Vaillant Couturier",
+        "zipAndCity": "75002 Paris"
+    },
+    {
+        "fullName": "Hugues Germain ",
+        "address": "12, rue deS Lilas",
+        "zipAndCity": "75008 Paris"
+    }
+]
