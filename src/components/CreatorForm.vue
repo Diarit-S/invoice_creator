@@ -4,7 +4,8 @@
       rel="stylesheet"
       href="https://cdn.materialdesignicons.com/5.3.45/css/materialdesignicons.min.css"
     />
-    <div class="left-side">
+    <div style="min-width: 200px"></div>
+    <div class="pdf-content__left">
       <b-field class="document-type" label="Type de document">
         <b-select placeholder="Type de document" v-model="content.title">
           <option v-for="type in utilDatas.types" :value="type" :key="type">
@@ -29,6 +30,30 @@
           {{ content.clientId >= 0 ? clients[content.clientId].address : "" }}
         </p>
       </b-field>
+
+      <b-field class="price-field" label="Total HT" label-position="on-border">
+        <b-tag type="is-info is-light" size="is-large">{{ totalWithoutTaxes }} €</b-tag>
+      </b-field>
+
+      <b-field class="price-field" label="TVA" label-position="on-border">
+        <b-tag type="is-info is-light" size="is-large">{{ taxeAmount }} €</b-tag>
+        <p class="control">
+          <b-dropdown v-model="TVAPercent">
+              <template #trigger>
+                <button class="button is-info">
+                  {{ TVAPercent }} %
+                </button>
+              </template>
+              <b-dropdown-item
+                v-for="percent in possibleTvaPercents"
+                aria-role="listitem"
+                :key="percent"
+                :value="percent"
+              >{{ percent }} %</b-dropdown-item>
+            </b-dropdown>
+        </p>
+      </b-field>
+
     </div>
 
     <div class="pdf-content__right">
@@ -78,6 +103,8 @@ export default {
       currentFields: [
         { type: 'text' }
       ],
+      possibleTvaPercents: [10, 20],
+      TVAPercent: 10
     };
   },
   props: {
@@ -100,6 +127,9 @@ export default {
         }
         return acc
       }, 0)
+    },
+    taxeAmount() {
+      return this.totalWithoutTaxes * (this.TVAPercent / 100)
     }
   },
   methods: {
@@ -125,6 +155,10 @@ export default {
       margin-top: 10px;
     }
   }
+
+  &__left {
+    position: fixed;
+  }
 }
 
 .document-type {
@@ -148,5 +182,9 @@ export default {
       align-items: flex-start;
     }
   }
+}
+
+.price-field {
+  margin: 30px 0;
 }
 </style>

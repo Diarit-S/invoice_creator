@@ -25,7 +25,9 @@
 
     </vue-html2pdf>
     <creator-form :content="content"></creator-form>
-    <button @click="generateReport">Download</button>  
+    <b-button size="is-medium" style="position:fixed; bottom: 50px" @click="generateReport" type="is-info" icon-left="file-pdf-outline">
+      PDF
+    </b-button>
     </div>
   </div>
 </template>
@@ -63,7 +65,7 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  margin-top: 60px;
+  margin-top: 10px;
   padding: 50px;
 }
 </style>
