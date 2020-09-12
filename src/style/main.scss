@@ -6,8 +6,9 @@
     padding: 10px;
     border: solid 2px rgb(178, 176, 184);
     border-radius: 6px;
-    min-height: 150px;
     min-width: 450px;
+    max-width: 450px;
+    // min-height: 150px;
 }
 
 .mce-edit-focus {

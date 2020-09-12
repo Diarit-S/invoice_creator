@@ -38,19 +38,25 @@
         :field="field"
       ></custom-field>
 
-      <b-dropdown aria-role="list">
-        <button class="button is-info" slot="trigger">
-          <b-icon icon="plus-circle-outline"></b-icon>
-        </button>
 
-        <b-dropdown-item
-          v-for="field in possibleFields"
-          aria-role="listitem"
-          :key="field"
-          @click="createNewField(field)"
-          >{{ field }}</b-dropdown-item
-        >
-      </b-dropdown>
+      <div class="pdf-content__right__config">
+        <b-dropdown aria-role="list" class="pdf-content__right__plus">
+          <button class="button is-info" slot="trigger">
+            <b-icon icon="plus-circle-outline"></b-icon>
+          </button>
+
+          <b-dropdown-item
+            v-for="field in possibleFields"
+            aria-role="listitem"
+            :key="field"
+            @click="createNewField(field)"
+            >{{ field }}</b-dropdown-item
+          >
+        </b-dropdown>
+
+        <b-tag type="is-warning is-light" size="is-large" v-if="totalWithoutTaxes">Total : {{ totalWithoutTaxes }} € HT</b-tag>
+
+      </div>
     </div>
   </div>
 </template>
@@ -69,7 +75,9 @@ export default {
   data() {
     return {
       possibleFields: ["text", "title", "info"],
-      currentFields: [],
+      currentFields: [
+        { type: 'text' }
+      ],
     };
   },
   props: {
@@ -85,6 +93,14 @@ export default {
     clients() {
       return clients;
     },
+    totalWithoutTaxes() {
+      return this.currentFields.reduce((acc, currentField) => {
+        if (currentField.amount) {
+          acc += currentField.amount
+        }
+        return acc
+      }, 0)
+    }
   },
   methods: {
     createNewField(fieldType) {
@@ -102,6 +118,12 @@ export default {
   &__right {
     padding-left: 50px;
     min-width: 80%;
+
+    &__config {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+    }
   }
 }
 
