@@ -1,0 +1,37 @@
+.tox-notification.tox-notification--in.tox-notification--warning {
+    display:none!important;
+}
+
+.mce-content-body {
+    padding: 10px;
+    border: solid 2px rgb(178, 176, 184);
+    border-radius: 6px;
+    min-height: 150px;
+    min-width: 450px;
+}
+
+.mce-edit-focus {
+    outline: none;
+}
+
+.tox-tinymce.tox-tinymce-inline {
+    border-radius: 6px !important;
+}
+
+.tox-editor-container {
+    border-radius: 6px !important;
+    border: 1px solid rgb(178, 176, 184) !important;
+}
+
+.tox-editor-header {
+    border-radius: 6px !important;
+    border: none !important;
+}
+.tox-toolbar-overlord {
+    border-radius: 6px;
+    border: none !important;
+}
+.tox-toolbar__primary {
+    border-radius: 6px !important;
+    border: none !important;
+}
