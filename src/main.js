@@ -1,9 +1,26 @@
 import Vue from 'vue'
 import App from './App.vue'
+
+import axios from "axios"
+import axiosSetup from "@/utils/axios-setup"
+
 import 'buefy/dist/buefy.css'
-import { Input, Field, Select, Dropdown, Icon, Tag, Button } from 'buefy'
+import { 
+  Input, 
+  Field, 
+  Select, 
+  Dropdown, 
+  Icon, 
+  Tag, 
+  Button,
+  Modal 
+} from 'buefy'
 
 import '@/style/main.scss'
+
+axiosSetup.initSetup()
+
+Vue.prototype.$http = axios
 
 Vue.use(Input)
 Vue.use(Field)
@@ -12,6 +29,7 @@ Vue.use(Dropdown)
 Vue.use(Icon)
 Vue.use(Tag)
 Vue.use(Button)
+Vue.use(Modal)
 
 Vue.config.productionTip = false
 

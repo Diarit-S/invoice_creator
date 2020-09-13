@@ -17,6 +17,19 @@
         >
       </b-field>
       <b-field class="client" label="Client">
+        <template #label>
+          <div class="client-field-label">
+            <span>Clients</span>
+            <div @click="openClientModal" >
+              <b-icon 
+                class="client-plus-icon" 
+                icon="plus-circle-outline" 
+                size="is-small" 
+                type="is-info"
+              ></b-icon>
+            </div>
+          </div>
+        </template>
         <b-select placeholder="Client" v-model="content.clientId">
           <option
             v-for="(client, index) in clients"
@@ -83,6 +96,20 @@
 
       </div>
     </div>
+
+    <b-modal v-model="isClientModalOpen">
+        <div class="client-modal-container">
+          <b-field label="Nom et Prénom" label-position="on-border" autocomplete="off">
+              <b-input v-model="newClient.fullName" autocomplete="off"></b-input>
+          </b-field>
+          <b-field label="Adresse" label-position="on-border" autocomplete="off">
+              <b-input v-model="newClient.address" autocomplete="off"></b-input>
+          </b-field>
+          <b-field label="Code postale et ville" label-position="on-border" autocomplete="off">
+              <b-input v-model="newClient.zipCodeAndCity" autocomplete="off"></b-input>
+          </b-field>
+        </div>
+    </b-modal>
   </div>
 </template>
 
@@ -104,7 +131,13 @@ export default {
         { type: 'text' }
       ],
       possibleTvaPercents: [10, 20],
-      TVAPercent: 10
+      TVAPercent: 10,
+      isClientModalOpen: false,
+      newClient: {
+        fullName: '',
+        address: '',
+        zipCodeAndCity: ''
+      }
     };
   },
   props: {
@@ -136,7 +169,17 @@ export default {
     createNewField(fieldType) {
       this.currentFields.push({ type: fieldType });
     },
+    async getClients() {
+      const clients = await this.$http.get('/client/')
+      console.log(clients)
+    },
+    openClientModal() {
+      this.isClientModalOpen = true
+    }
   },
+  created() {
+    this.getClients()
+  }
 };
 </script>
 
@@ -187,4 +230,21 @@ export default {
 .price-field {
   margin: 30px 0;
 }
+
+.client-field-label {
+  display: flex;
+  align-items: center;
+
+  .client-plus-icon {
+    cursor: pointer;
+    margin-left: 8px;
+  }
+}
+
+.client-modal-container {
+  border-radius: 6px;
+  background-color: white; 
+  padding: 20px
+}
+
 </style>
