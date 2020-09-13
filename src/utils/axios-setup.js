@@ -6,7 +6,9 @@ let setup = {
     this.setDefaultHeader()
   },
   setBaseUrl() {
-    axios.defaults.baseURL = 'https://frozen-everglades-18700.herokuapp.com/api/'
+    axios.defaults.baseURL = 'http://localhost:3000/api/'
+    // 'http://localhost:3000/api/'
+    // 'https://frozen-everglades-18700.herokuapp.com/api/'
   },
   setDefaultHeader() {
     // axios.defaults.headers.common["Accept"] = "application/json"

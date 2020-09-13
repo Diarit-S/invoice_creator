@@ -42,7 +42,7 @@ export default {
   data() {
     return {
       content: {
-        title: 'devis'
+        type: 'devis'
       }
     }
   },

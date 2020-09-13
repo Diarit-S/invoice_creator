@@ -1,7 +1,6 @@
-<template>
-  <div class="pdf-content">
-    <p>{{ content.title }}</p>
-  </div>
+<template lang="pug">
+  div.pdf-content
+    p {{ content.type }}
 </template>
 
 <script>

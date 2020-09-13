@@ -7,13 +7,13 @@
     <div style="min-width: 200px"></div>
     <div class="pdf-content__left">
       <b-field class="document-type" label="Type de document">
-        <b-select placeholder="Type de document" v-model="content.title">
+        <b-select placeholder="Type de document" v-model="content.type">
           <option v-for="type in utilDatas.types" :value="type" :key="type">
             {{ type }}
           </option>
         </b-select>
         <span class="document-number"
-          >N° {{ utilDatas[content.title].number }}</span
+          >N° {{ utilDatas[content.type].number }}</span
         >
       </b-field>
       <b-field class="client" label="Client">
@@ -67,30 +67,23 @@
         </p>
       </b-field>
 
+      <b-field class="price-field" label="Total TTC" label-position="on-border">
+        <b-tag type="is-warning is-light" size="is-large">{{ totalAmount }} €</b-tag>
+      </b-field>
+
     </div>
 
     <div class="pdf-content__right">
       <custom-field
         v-for="(field, index) in currentFields"
-        :key="field.type + index"
+        :key="'field' + index"
         :field="field"
       ></custom-field>
 
 
       <div class="pdf-content__right__config">
-        <b-dropdown aria-role="list" class="pdf-content__right__plus">
-          <button class="button is-info" slot="trigger">
-            <b-icon icon="plus-circle-outline"></b-icon>
-          </button>
-
-          <b-dropdown-item
-            v-for="field in possibleFields"
-            aria-role="listitem"
-            :key="field"
-            @click="createNewField(field)"
-            >{{ field }}</b-dropdown-item
-          >
-        </b-dropdown>
+        <b-button size="is-medium" class="is-info" icon-left="plus-circle-outline" @click="createNewField">
+        </b-button>
 
         <b-tag type="is-warning is-light" size="is-large" v-if="totalWithoutTaxes">Total : {{ totalWithoutTaxes }} € HT</b-tag>
 
@@ -108,14 +101,24 @@
           <b-field label="Code postale et ville" label-position="on-border" autocomplete="off">
               <b-input v-model="newClient.zipCodeAndCity" autocomplete="off"></b-input>
           </b-field>
+
+          <b-button 
+            size="is-small" 
+            @click="createClient" 
+            type="is-info"
+          >Valider</b-button>
+
         </div>
     </b-modal>
+
+    <b-button size="is-medium" class="save-button" @click="handleDocumentSave" type="is-success" icon-left="content-save-all-outline">
+      Enregistrer
+    </b-button>
   </div>
 </template>
 
 <script>
 import utilDatas from "@/utils/utilDatas.json";
-import clients from "@/utils/clientDataBase.json";
 
 import CustomField from "./CustomField";
 
@@ -126,9 +129,8 @@ export default {
   },
   data() {
     return {
-      possibleFields: ["text", "title", "info"],
       currentFields: [
-        { type: 'text' }
+        {unit: 'm²'}
       ],
       possibleTvaPercents: [10, 20],
       TVAPercent: 10,
@@ -137,7 +139,8 @@ export default {
         fullName: '',
         address: '',
         zipCodeAndCity: ''
-      }
+      },
+      clients: []
     };
   },
   props: {
@@ -150,9 +153,6 @@ export default {
     utilDatas() {
       return utilDatas;
     },
-    clients() {
-      return clients;
-    },
     totalWithoutTaxes() {
       return this.currentFields.reduce((acc, currentField) => {
         if (currentField.amount) {
@@ -163,18 +163,29 @@ export default {
     },
     taxeAmount() {
       return this.totalWithoutTaxes * (this.TVAPercent / 100)
+    },
+    totalAmount() {
+      return this.totalWithoutTaxes + this.taxeAmount
     }
   },
   methods: {
-    createNewField(fieldType) {
-      this.currentFields.push({ type: fieldType });
+    createNewField() {
+      this.currentFields.push({unit: 'm²'});
     },
     async getClients() {
       const clients = await this.$http.get('/client/')
-      console.log(clients)
+      this.clients = clients.data
     },
     openClientModal() {
       this.isClientModalOpen = true
+    },
+    async createClient() {
+      const { fullName, address, zipCodeAndCity } = this.newClient
+      const newClient = await this.$http.post('/client/createClient', { fullName, address, zipCodeAndCity }) 
+      console.log(newClient)
+    },
+    handleDocumentSave() {
+      console.log(this.currentFields)
     }
   },
   created() {
@@ -244,7 +255,15 @@ export default {
 .client-modal-container {
   border-radius: 6px;
   background-color: white; 
-  padding: 20px
+  padding: 20px;
+  max-width: 500px;
+  margin: auto;
 }
 
+.save-button {
+  position: fixed; 
+  bottom: 0px; 
+  left: 50%;
+  border-radius: 6px 6px 0 0;
+}
 </style>
