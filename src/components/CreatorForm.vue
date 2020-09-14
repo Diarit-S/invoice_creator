@@ -1,120 +1,87 @@
-<template>
-  <div class="pdf-content">
-    <link
+<template lang="pug">
+  div.pdf-content
+    link(
       rel="stylesheet"
       href="https://cdn.materialdesignicons.com/5.3.45/css/materialdesignicons.min.css"
-    />
-    <div style="min-width: 200px"></div>
-    <div class="pdf-content__left">
-      <b-field class="document-type" label="Type de document">
-        <b-select placeholder="Type de document" v-model="content.type">
-          <option v-for="type in utilDatas.types" :value="type" :key="type">
-            {{ type }}
-          </option>
-        </b-select>
-        <span class="document-number"
-          >N° {{ utilDatas[content.type].number }}</span
-        >
-      </b-field>
-      <b-field class="client" label="Client">
-        <template #label>
-          <div class="client-field-label">
-            <span>Clients</span>
-            <div @click="openClientModal" >
-              <b-icon 
-                class="client-plus-icon" 
+    )
+    div(style="min-width: 200px")
+    .pdf-content__left
+      b-field.document-type(label="Type de document")
+        b-select(placeholder="Type de document" v-model="content.type")
+          option(v-for="type in utilDatas.types" :value="type" :key="type")
+            | {{ type }}
+        span.document-number N° {{ utilDatas[content.type].number }}
+
+      b-field.client(label="Client")
+        template(#label)
+          .client-field-label
+            span Clients
+            div(@click="openClientModal")
+              b-icon.client-plus-icon(
                 icon="plus-circle-outline" 
                 size="is-small" 
                 type="is-info"
-              ></b-icon>
-            </div>
-          </div>
-        </template>
-        <b-select placeholder="Client" v-model="content.clientId">
-          <option
+              )
+        b-select(placeholder="Client" v-model="content.clientId")
+          option(
             v-for="(client, index) in clients"
             :value="index"
             :key="client.fullName + index"
-          >
-            {{ client.fullName }}
-          </option>
-        </b-select>
-        <p>
-          {{ content.clientId >= 0 ? clients[content.clientId].address : "" }}
-        </p>
-      </b-field>
+          ) {{ client.fullName }}
+        p {{ content.clientId >= 0 ? clients[content.clientId].address : "" }}
 
-      <b-field class="price-field" label="Total HT" label-position="on-border">
-        <b-tag type="is-info is-light" size="is-large">{{ totalWithoutTaxes }} €</b-tag>
-      </b-field>
+      b-field.price-field( label="Total HT" label-position="on-border")
+        b-tag(type="is-info is-light" size="is-large") {{ totalWithoutTaxes }} €
 
-      <b-field class="price-field" label="TVA" label-position="on-border">
-        <b-tag type="is-info is-light" size="is-large">{{ taxeAmount }} €</b-tag>
-        <p class="control">
-          <b-dropdown v-model="TVAPercent">
-              <template #trigger>
-                <button class="button is-info">
-                  {{ TVAPercent }} %
-                </button>
-              </template>
-              <b-dropdown-item
-                v-for="percent in possibleTvaPercents"
-                aria-role="listitem"
-                :key="percent"
-                :value="percent"
-              >{{ percent }} %</b-dropdown-item>
-            </b-dropdown>
-        </p>
-      </b-field>
+      b-field.price-field(label="TVA" label-position="on-border")
+        b-tag(type="is-info is-light" size="is-large") {{ taxeAmount }} €
+        p.control
+          b-dropdown(v-model="TVAPercent")
+            template(#trigger)
+              button(class="button is-info") {{ TVAPercent }} %
+            b-dropdown-item(
+              v-for="percent in possibleTvaPercents"
+              aria-role="listitem"
+              :key="percent"
+              :value="percent"
+            ) {{ percent }} %
 
-      <b-field class="price-field" label="Total TTC" label-position="on-border">
-        <b-tag type="is-warning is-light" size="is-large">{{ totalAmount }} €</b-tag>
-      </b-field>
+      b-field.price-field(label="Total TTC" label-position="on-border")
+        b-tag(type="is-warning is-light" size="is-large") {{ totalAmount }} €
 
-    </div>
-
-    <div class="pdf-content__right">
-      <custom-field
+    .pdf-content__right
+      custom-field(
         v-for="(field, index) in currentFields"
         :key="'field' + index"
         :field="field"
-      ></custom-field>
+      )
 
+      .pdf-content__right__config
+        b-button.is-info(size="is-medium" icon-left="plus-circle-outline" @click="createNewField")
+        b-tag(type="is-warning is-light" size="is-large" v-if="totalWithoutTaxes")
+          | Total : {{ totalWithoutTaxes }} € HT
 
-      <div class="pdf-content__right__config">
-        <b-button size="is-medium" class="is-info" icon-left="plus-circle-outline" @click="createNewField">
-        </b-button>
+    b-modal(v-model="isClientModalOpen")
+      .client-modal-container
+        b-field(label="Nom et Prénom" label-position="on-border" autocomplete="off")
+          b-input(v-model="newClient.fullName" autocomplete="off")
+        b-field(label="Adresse" label-position="on-border" autocomplete="off")
+          b-input(v-model="newClient.address" autocomplete="off")
+        b-field(label="Code postale et ville" label-position="on-border" autocomplete="off")
+          b-input(v-model="newClient.zipCodeAndCity" autocomplete="off")
 
-        <b-tag type="is-warning is-light" size="is-large" v-if="totalWithoutTaxes">Total : {{ totalWithoutTaxes }} € HT</b-tag>
+        b-button(
+          size="is-small" 
+          @click="createClient" 
+          type="is-info"
+        ) Valider
 
-      </div>
-    </div>
-
-    <b-modal v-model="isClientModalOpen">
-        <div class="client-modal-container">
-          <b-field label="Nom et Prénom" label-position="on-border" autocomplete="off">
-              <b-input v-model="newClient.fullName" autocomplete="off"></b-input>
-          </b-field>
-          <b-field label="Adresse" label-position="on-border" autocomplete="off">
-              <b-input v-model="newClient.address" autocomplete="off"></b-input>
-          </b-field>
-          <b-field label="Code postale et ville" label-position="on-border" autocomplete="off">
-              <b-input v-model="newClient.zipCodeAndCity" autocomplete="off"></b-input>
-          </b-field>
-
-          <b-button 
-            size="is-small" 
-            @click="createClient" 
-            type="is-info"
-          >Valider</b-button>
-
-        </div>
-    </b-modal>
-
-    <b-button size="is-medium" class="save-button" @click="handleDocumentSave" type="is-success" icon-left="content-save-all-outline">
-      Enregistrer
-    </b-button>
-  </div>
+    b-button.save-button(
+      size="is-medium" 
+      @click="handleDocumentSave" 
+      type="is-success" 
+      icon-left="content-save-all-outline"
+    ) Enregistrer
 </template>
 
 <script>
@@ -140,7 +107,8 @@ export default {
         address: '',
         zipCodeAndCity: ''
       },
-      clients: []
+      clients: [],
+      currentPaper: {}
     };
   },
   props: {
@@ -190,6 +158,7 @@ export default {
   },
   created() {
     this.getClients()
+    this.currentPaper.fields = this.currentFields
   }
 };
 </script>

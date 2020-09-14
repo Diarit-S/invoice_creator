@@ -6,7 +6,7 @@ let setup = {
     this.setDefaultHeader()
   },
   setBaseUrl() {
-    axios.defaults.baseURL = 'http://localhost:3000/api/'
+    axios.defaults.baseURL = 'https://frozen-everglades-18700.herokuapp.com/api/'
     // 'http://localhost:3000/api/'
     // 'https://frozen-everglades-18700.herokuapp.com/api/'
   },
