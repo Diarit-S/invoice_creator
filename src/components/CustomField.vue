@@ -1,49 +1,39 @@
-<template>
-  <div class="custom-field">
-    <div class="custom-field__infos">
-      <b-field label="Texte" class="custom-field__infos__content">
-        <editor v-model="field.content" :init="tinyConfig"></editor>
-      </b-field>
+<template lang="pug">
+  div.custom-field
+    div.custom-field__infos
+      b-field.custom-field__infos__content(label="Texte")
+        editor(v-model="field.content" :init="tinyConfig")
 
-      <b-field
+      b-field(
         label="Unité"
         label-position="on-border"
         class="custom-field__infos__unit"
-      >
-        <b-input type="text" v-model="field.unitValue"></b-input>
-        <p class="control">
-          <b-dropdown v-model="unitFormat">
-            <template #trigger>
-              <button class="button is-info">
-                {{ unitFormat === "Ensemble" ? "Ens" : unitFormat }}
-              </button>
-            </template>
-            <b-dropdown-item
+      )
+        b-input(type="text" v-model="field.unitValue")
+        p.control
+          b-dropdown(v-model="unitFormat")
+            template(#trigger)
+              button.button.is-info {{ unitFormat === "Ensemble" ? "Ens" : unitFormat }}
+            b-dropdown-item(
               v-for="unit in possibleUnits"
               aria-role="listitem"
               :key="unit"
               :value="unit"
-              >{{ unit }}</b-dropdown-item
-            >
-          </b-dropdown>
-        </p>
-      </b-field>
+            ) {{ unit }}
 
-      <b-field
+      b-field(
         label="Prix unitaire"
         label-position="on-border"
         class="custom-field__infos__ht-price"
-      >
-        <b-input type="number" step="0.1" v-model="field.unitPrice"></b-input>
-      </b-field>
-    </div>
+      )
+        b-input(type="number" step="0.1" v-model="field.unitPrice")
 
-    <div class="custom-field__price">
-      <b-tag type="is-info is-light" size="is-large" v-if="calculatedFieldPrice"
-        >{{ calculatedFieldPrice }} € HT</b-tag
-      >
-    </div>
-  </div>
+    div.custom-field__price
+      b-tag(
+        type="is-info is-light" 
+        size="is-large" 
+        v-if="calculatedFieldPrice"
+      ) {{ calculatedFieldPrice }} € HT
 </template>
 
 <script>
