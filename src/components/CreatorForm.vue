@@ -7,10 +7,10 @@
     div(style="min-width: 200px")
     .pdf-content__left
       b-field.document-type(label="Type de document")
-        b-select(placeholder="Type de document" v-model="content.type")
-          option(v-for="type in utilDatas.types" :value="type" :key="type")
+        b-select(placeholder="Type de document" v-model="currentPaper.type")
+          option(v-for="type in possibleTypes" :value="type" :key="type")
             | {{ type }}
-        span.document-number N° {{ utilDatas[content.type].number }}
+        //- span.document-number N° {{ utilDatas[content.type].number }}
 
       b-field.client(label="Client")
         template(#label)
@@ -36,9 +36,9 @@
       b-field.price-field(label="TVA" label-position="on-border")
         b-tag(type="is-info is-light" size="is-large") {{ taxeAmount }} €
         p.control
-          b-dropdown(v-model="TVAPercent")
+          b-dropdown(v-model="currentPaper.TVAPercent")
             template(#trigger)
-              button(class="button is-info") {{ TVAPercent }} %
+              button(class="button is-info") {{ currentPaper.TVAPercent }} %
             b-dropdown-item(
               v-for="percent in possibleTvaPercents"
               aria-role="listitem"
@@ -49,9 +49,11 @@
       b-field.price-field(label="Total TTC" label-position="on-border")
         b-tag(type="is-warning is-light" size="is-large") {{ totalAmount }} €
 
+      b-button(@click="createPaper") Create
+
     .pdf-content__right
       custom-field(
-        v-for="(field, index) in currentFields"
+        v-for="(field, index) in currentPaper.fields"
         :key="'field' + index"
         :field="field"
       )
@@ -85,7 +87,6 @@
 </template>
 
 <script>
-import utilDatas from "@/utils/utilDatas.json";
 
 import CustomField from "./CustomField";
 
@@ -96,11 +97,8 @@ export default {
   },
   data() {
     return {
-      currentFields: [
-        {unit: 'm²'}
-      ],
       possibleTvaPercents: [10, 20],
-      TVAPercent: 10,
+      possibleTypes: ['facture', 'devis'],
       isClientModalOpen: false,
       newClient: {
         fullName: '',
@@ -108,7 +106,15 @@ export default {
         zipCodeAndCity: ''
       },
       clients: [],
-      currentPaper: {}
+      currentPaper: {
+        type: 'quote',
+        fields: [
+          {unit: 'm²'}
+        ],
+        TVAPercent: 10,
+        documentNumber: 1,
+        clientId: '5f5e301e972a0900171c8fd2'
+      }
     };
   },
   props: {
@@ -118,11 +124,8 @@ export default {
     },
   },
   computed: {
-    utilDatas() {
-      return utilDatas;
-    },
     totalWithoutTaxes() {
-      return this.currentFields.reduce((acc, currentField) => {
+      return this.currentPaper.fields.reduce((acc, currentField) => {
         if (currentField.amount) {
           acc += currentField.amount
         }
@@ -130,7 +133,7 @@ export default {
       }, 0)
     },
     taxeAmount() {
-      return this.totalWithoutTaxes * (this.TVAPercent / 100)
+      return this.totalWithoutTaxes * (this.currentPaper.TVAPercent / 100)
     },
     totalAmount() {
       return this.totalWithoutTaxes + this.taxeAmount
@@ -138,7 +141,7 @@ export default {
   },
   methods: {
     createNewField() {
-      this.currentFields.push({unit: 'm²'});
+      this.currentPaper.fields.push({unit: 'm²'});
     },
     async getClients() {
       const clients = await this.$http.get('/client/')
@@ -152,13 +155,23 @@ export default {
       const newClient = await this.$http.post('/client/createClient', { fullName, address, zipCodeAndCity }) 
       console.log(newClient)
     },
+    async createPaper() {
+      const newPaper = await this.$http.post('/paper/createPaper', this.currentPaper) 
+      console.log(newPaper)
+    },
     handleDocumentSave() {
-      console.log(this.currentFields)
+      console.log(this.currentPaper.fields)
+    },
+    async getLastDocumentNumber() {
+      const lastDocumentNumber = await this.$http.get(`/paper/getLastNumber/${this.currentPaper.type}`)
+      //- .data ....
+      this.currentPaper.documentNumber = lastDocumentNumber
     }
   },
   created() {
     this.getClients()
-    this.currentPaper.fields = this.currentFields
+    //- this.getLastDocumentNumber
+    //- Create a watch for document type and recall getLastDocumentNumber
   }
 };
 </script>
