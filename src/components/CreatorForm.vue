@@ -8,8 +8,8 @@
     .pdf-content__left
       b-field.document-type(label="Type de document")
         b-select(placeholder="Type de document" v-model="currentPaper.type")
-          option(v-for="type in possibleTypes" :value="type" :key="type")
-            | {{ type }}
+          option(v-for="type in possibleTypes" :value="type.key" :key="type.key")
+            | {{ type.value }}
         //- span.document-number N° {{ utilDatas[content.type].number }}
 
       b-field.client(label="Client")
@@ -98,7 +98,16 @@ export default {
   data() {
     return {
       possibleTvaPercents: [10, 20],
-      possibleTypes: ['facture', 'devis'],
+      possibleTypes: [
+        {
+          key: "invoice",
+          value: 'facture'
+        },
+        {
+          key: "quote",
+          value: 'devis'
+        }
+      ],
       isClientModalOpen: false,
       newClient: {
         fullName: '',
@@ -166,12 +175,22 @@ export default {
       const lastDocumentNumber = await this.$http.get(`/paper/getLastNumber/${this.currentPaper.type}`)
       //- .data ....
       this.currentPaper.documentNumber = lastDocumentNumber
+    },
+    async getLastDocumentNumberByType() {
+      const lastNumber = await this.$http.get(`/paper/getLastNumberOfType/${this.currentPaper.type}`)
+      console.log(lastNumber)
     }
   },
   created() {
     this.getClients()
+    this.getLastDocumentNumberByType()
     //- this.getLastDocumentNumber
     //- Create a watch for document type and recall getLastDocumentNumber
+  },
+  watch: {
+    'currentPaper.type': function() {
+      this.getLastDocumentNumberByType()
+    }
   }
 };
 </script>
