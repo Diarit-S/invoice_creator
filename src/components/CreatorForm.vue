@@ -33,6 +33,13 @@
       b-field.price-field( label="Total HT" label-position="on-border")
         b-tag(type="is-info is-light" size="is-large") {{ totalWithoutTaxes }} €
 
+      b-field.price-field( label="Date" label-position="on-border")
+        b-datepicker(
+          v-model="currentPaper.creationDate"
+          placeholder="Selectionner une date"
+          icon="calendar-today"
+        )
+
       b-field.price-field(label="TVA" label-position="on-border")
         b-tag(type="is-info is-light" size="is-large") {{ taxeAmount }} €
         p.control
@@ -213,6 +220,13 @@ export default {
 
   &__left {
     position: fixed;
+    min-width: 200px;
+    max-width: 250px;
+    border-right: 1px solid lightgray;
+
+   .field {
+     max-width: 150px;
+   }
   }
 }
 

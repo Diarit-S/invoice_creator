@@ -13,7 +13,8 @@ import {
   Icon, 
   Tag, 
   Button,
-  Modal 
+  Modal,
+  Datepicker
 } from 'buefy'
 
 import '@/style/main.scss'
@@ -30,6 +31,7 @@ Vue.use(Icon)
 Vue.use(Tag)
 Vue.use(Button)
 Vue.use(Modal)
+Vue.use(Datepicker)
 
 Vue.config.productionTip = false
 
