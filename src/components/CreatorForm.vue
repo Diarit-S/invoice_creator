@@ -4,7 +4,7 @@
       rel="stylesheet"
       href="https://cdn.materialdesignicons.com/5.3.45/css/materialdesignicons.min.css"
     )
-    div(style="min-width: 200px")
+    div(style="min-width: 300px")
     .pdf-content__left
       b-field.document-type(label="Type de document")
         b-select(placeholder="Type de document" v-model="currentPaper.type")
@@ -12,10 +12,10 @@
             | {{ type.value }}
         //- span.document-number N° {{ utilDatas[content.type].number }}
 
-      b-field.client(label="Client")
+      b-field.client
         template(#label)
           .client-field-label
-            span Clients
+            span Client
             div(@click="openClientModal")
               b-icon.client-plus-icon(
                 icon="plus-circle-outline" 
@@ -30,15 +30,16 @@
           ) {{ client.fullName }}
         p {{ content.clientId >= 0 ? clients[content.clientId].address : "" }}
 
-      b-field.price-field( label="Total HT" label-position="on-border")
-        b-tag(type="is-info is-light" size="is-large") {{ totalWithoutTaxes }} €
-
-      b-field.price-field( label="Date" label-position="on-border")
+      b-field( label="Date" label-position="on-border")
         b-datepicker(
           v-model="currentPaper.creationDate"
           placeholder="Selectionner une date"
           icon="calendar-today"
         )
+        
+      b-field.price-field( label="Total HT" label-position="on-border")
+        b-tag(type="is-info is-light" size="is-large") {{ totalWithoutTaxes }} €
+
 
       b-field.price-field(label="TVA" label-position="on-border")
         b-tag(type="is-info is-light" size="is-large") {{ taxeAmount }} €
@@ -209,7 +210,8 @@ export default {
 
   &__right {
     padding-left: 50px;
-    min-width: 80%;
+    min-width: 70%;
+    max-width: 70%
 
     &__config {
       display: flex;
@@ -220,12 +222,17 @@ export default {
 
   &__left {
     position: fixed;
-    min-width: 200px;
-    max-width: 250px;
-    border-right: 1px solid lightgray;
+    min-width: 400px;
+    max-width: 400px;
+    box-shadow: 0 0 20px rgba($color: gray, $alpha: 0.4);
+    padding: 20px;
+    border-radius: 10px;
+    min-height: 80vh;
+
 
    .field {
      max-width: 150px;
+     margin: 30px 0;
    }
   }
 }

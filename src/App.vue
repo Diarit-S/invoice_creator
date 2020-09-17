@@ -66,6 +66,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
   margin-top: 10px;
-  padding: 50px;
+  padding: 20px;
 }
 </style>

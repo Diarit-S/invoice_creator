@@ -1,7 +1,7 @@
 <template lang="pug">
   div.custom-field
     div.custom-field__infos
-      b-field.custom-field__infos__content(label="Texte")
+      b-field.custom-field__infos__content
         editor(v-model="field.content" :init="tinyConfig")
 
       b-field(
@@ -108,6 +108,10 @@ export default {
   &__infos {
     display: flex;
     align-items: flex-end;
+
+    &__content {
+      margin: 15px 0;
+    }
 
     .field {
       margin-bottom: 0 !important;
