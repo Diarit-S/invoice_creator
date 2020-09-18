@@ -1,63 +1,12 @@
 <template lang="pug">
   div.pdf-content
-    link(
-      rel="stylesheet"
-      href="https://cdn.materialdesignicons.com/5.3.45/css/materialdesignicons.min.css"
+    div(style="min-width: 375px")
+
+    left-side(
+      :currentPaper="currentPaper"
+      :amountsData="amountsData"
+      @openClientModal="openClientModal"
     )
-    div(style="min-width: 300px")
-    .pdf-content__left
-      b-field.document-type(label="Type de document")
-        b-select(placeholder="Type de document" v-model="currentPaper.type")
-          option(v-for="type in possibleTypes" :value="type.key" :key="type.key")
-            | {{ type.value }}
-        //- span.document-number N° {{ utilDatas[content.type].number }}
-
-      b-field.client
-        template(#label)
-          .client-field-label
-            span Client
-            div(@click="openClientModal")
-              b-icon.client-plus-icon(
-                icon="plus-circle-outline" 
-                size="is-small" 
-                type="is-info"
-              )
-        b-select(placeholder="Client" v-model="content.clientId")
-          option(
-            v-for="(client, index) in clients"
-            :value="index"
-            :key="client.fullName + index"
-          ) {{ client.fullName }}
-        p {{ content.clientId >= 0 ? clients[content.clientId].address : "" }}
-
-      b-field( label="Date" label-position="on-border")
-        b-datepicker(
-          v-model="currentPaper.creationDate"
-          placeholder="Selectionner une date"
-          icon="calendar-today"
-        )
-        
-      b-field.price-field( label="Total HT" label-position="on-border")
-        b-tag(type="is-info is-light" size="is-large") {{ totalWithoutTaxes }} €
-
-
-      b-field.price-field(label="TVA" label-position="on-border")
-        b-tag(type="is-info is-light" size="is-large") {{ taxeAmount }} €
-        p.control
-          b-dropdown(v-model="currentPaper.TVAPercent")
-            template(#trigger)
-              button(class="button is-info") {{ currentPaper.TVAPercent }} %
-            b-dropdown-item(
-              v-for="percent in possibleTvaPercents"
-              aria-role="listitem"
-              :key="percent"
-              :value="percent"
-            ) {{ percent }} %
-
-      b-field.price-field(label="Total TTC" label-position="on-border")
-        b-tag(type="is-warning is-light" size="is-large") {{ totalAmount }} €
-
-      b-button(@click="createPaper") Create
 
     .pdf-content__right
       custom-field(
@@ -68,10 +17,15 @@
 
       .pdf-content__right__config
         b-button.is-info(size="is-medium" icon-left="plus-circle-outline" @click="createNewField")
-        b-tag(type="is-warning is-light" size="is-large" v-if="totalWithoutTaxes")
-          | Total : {{ totalWithoutTaxes }} € HT
 
-    b-modal(v-model="isClientModalOpen")
+    b-button.save-button(
+      size="is-medium" 
+      @click="handleDocumentSave" 
+      type="is-success" 
+      icon-left="content-save-all-outline"
+    ) Enregistrer
+
+    b-modal(v-model="isClientModalOpen" style="z-index: 1000")
       .client-modal-container
         b-field(label="Nom et Prénom" label-position="on-border" autocomplete="off")
           b-input(v-model="newClient.fullName" autocomplete="off")
@@ -85,44 +39,22 @@
           @click="createClient" 
           type="is-info"
         ) Valider
-
-    b-button.save-button(
-      size="is-medium" 
-      @click="handleDocumentSave" 
-      type="is-success" 
-      icon-left="content-save-all-outline"
-    ) Enregistrer
 </template>
 
 <script>
 
 import CustomField from "./CustomField";
 
+import LeftSide from "./LeftSide";
+
 export default {
   name: "CreatorForm",
   components: {
     CustomField,
+    LeftSide
   },
   data() {
     return {
-      possibleTvaPercents: [10, 20],
-      possibleTypes: [
-        {
-          key: "invoice",
-          value: 'facture'
-        },
-        {
-          key: "quote",
-          value: 'devis'
-        }
-      ],
-      isClientModalOpen: false,
-      newClient: {
-        fullName: '',
-        address: '',
-        zipCodeAndCity: ''
-      },
-      clients: [],
       currentPaper: {
         type: 'quote',
         fields: [
@@ -131,8 +63,14 @@ export default {
         TVAPercent: 10,
         documentNumber: 1,
         clientId: '5f5e301e972a0900171c8fd2'
+      },
+      isClientModalOpen: false,
+      newClient: {
+        fullName: '',
+        address: '',
+        zipCodeAndCity: ''
       }
-    };
+    }
   },
   props: {
     content: {
@@ -154,6 +92,13 @@ export default {
     },
     totalAmount() {
       return this.totalWithoutTaxes + this.taxeAmount
+    },
+    amountsData() {
+      return {
+        totalWithoutTaxes: this.totalWithoutTaxes,
+        taxeAmount: this.taxeAmount,
+        totalAmount: this.totalAmount
+      }
     }
   },
   methods: {
@@ -163,9 +108,6 @@ export default {
     async getClients() {
       const clients = await this.$http.get('/client/')
       this.clients = clients.data
-    },
-    openClientModal() {
-      this.isClientModalOpen = true
     },
     async createClient() {
       const { fullName, address, zipCodeAndCity } = this.newClient
@@ -187,6 +129,9 @@ export default {
     async getLastDocumentNumberByType() {
       const lastNumber = await this.$http.get(`/paper/getLastNumberOfType/${this.currentPaper.type}`)
       console.log(lastNumber)
+    },
+    openClientModal() {
+      this.isClientModalOpen = true
     }
   },
   created() {
