@@ -6,6 +6,7 @@
       :currentPaper="currentPaper"
       :amountsData="amountsData"
       @openClientModal="openClientModal"
+      @generateReport="generateReport"
     )
 
     .pdf-content__right
@@ -80,24 +81,30 @@ export default {
   },
   computed: {
     totalWithoutTaxes() {
-      return this.currentPaper.fields.reduce((acc, currentField) => {
+      return parseFloat(this.currentPaper.fields.reduce((acc, currentField) => {
         if (currentField.amount) {
           acc += currentField.amount
         }
         return acc
-      }, 0)
+      }, 0).toFixed(2))
     },
     taxeAmount() {
-      return this.totalWithoutTaxes * (this.currentPaper.TVAPercent / 100)
+      return parseFloat((this.totalWithoutTaxes * (this.currentPaper.TVAPercent / 100)).toFixed(2))
     },
     totalAmount() {
-      return this.totalWithoutTaxes + this.taxeAmount
+      return parseFloat((this.totalWithoutTaxes + this.taxeAmount).toFixed(2))
     },
     amountsData() {
       return {
         totalWithoutTaxes: this.totalWithoutTaxes,
         taxeAmount: this.taxeAmount,
         totalAmount: this.totalAmount
+      }
+    },
+    fullPdfContent() {
+      return {
+        paper: this.currentPaper,
+        amounts: this.amountsData
       }
     }
   },
@@ -132,6 +139,9 @@ export default {
     },
     openClientModal() {
       this.isClientModalOpen = true
+    },
+    generateReport(clients) {
+      this.$emit('generateReport', {content: this.fullPdfContent, clients})
     }
   },
   created() {

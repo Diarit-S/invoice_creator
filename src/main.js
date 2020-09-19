@@ -14,7 +14,9 @@ import {
   Tag, 
   Button,
   Modal,
-  Datepicker
+  Datepicker,
+  Numberinput,
+  Table
 } from 'buefy'
 
 import '@/style/main.scss'
@@ -32,6 +34,8 @@ Vue.use(Tag)
 Vue.use(Button)
 Vue.use(Modal)
 Vue.use(Datepicker)
+Vue.use(Numberinput)
+Vue.use(Table)
 
 Vue.config.productionTip = false
 

@@ -105,8 +105,10 @@ export default {
       console.log(newClient)
     },
     async createPaper() {
-      const newPaper = await this.$http.post('/paper/createPaper', this.currentPaper) 
-      console.log(newPaper)
+      this.$emit('generateReport', this.clients)
+      // const newPaper = await this.$http.post('/paper/createPaper', this.currentPaper) 
+      // console.log(newPaper)
+
     },
     async getLastDocumentNumberByType() {
       const lastNumber = await this.$http.get(`/paper/getLastNumberOfType/${this.currentPaper.type}`)

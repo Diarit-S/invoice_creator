@@ -8,8 +8,9 @@
         label="Unité"
         label-position="on-border"
         class="custom-field__infos__unit"
+        :grouped="false"
       )
-        b-input(type="text" v-model="field.unitValue")
+        b-numberinput(:controls="false" v-model="field.unitValue" step="0.01")
         p.control
           b-dropdown(v-model="unitFormat")
             template(#trigger)
@@ -26,7 +27,7 @@
         label-position="on-border"
         class="custom-field__infos__ht-price"
       )
-        b-input(type="number" step="0.1" v-model="field.unitPrice")
+        b-numberinput(:controls="false" v-model="field.unitPrice" step="0.01")
 
     div.custom-field__price
       b-tag(
@@ -66,21 +67,21 @@ export default {
       },
       set(value) {
         if (this.field.unit === "Ensemble") {
-          this.$set(this.field, "unitValue", "");
+          this.$set(this.field, "unitValue", 1);
         }
         if (value === "Ensemble") {
-          this.$set(this.field, "unitValue", "Ensemble");
+          this.$set(this.field, "unitValue", 1);
         }
         this.$set(this.field, "unit", value);
       },
     },
     calculatedFieldPrice() {
       if (this.field.unitValue * this.field.unitPrice) {
-        return this.field.unitValue * this.field.unitPrice;
+        return parseFloat((this.field.unitValue * this.field.unitPrice).toFixed(2));
       } else {
         return this.field.unitPrice;
       }
-    },
+    }
   },
   methods: {
     onInitialized(editor) {
@@ -88,7 +89,8 @@ export default {
     },
   },
   watch: {
-    "field.unitPrice": function() {
+    "field.unitPrice": function(newValue) {
+      console.log(newValue)
       this.$set(this.field, "amount", this.calculatedFieldPrice);
     },
     "field.unitValue": function() {
@@ -115,16 +117,28 @@ export default {
 
     .field {
       margin-bottom: 0 !important;
-      margin-right: 10px;
     }
 
     &__unit {
       max-width: 175px;
+      margin: 10px;
     }
 
     &__ht-price {
       max-width: 175px;
+      margin: 10px;
     }
   }
+
+  &::v-deep {
+    .label {
+      margin-left: 0 !important;
+    }
+
+    .input {
+      text-align: right;
+    }
+  }
+
 }
 </style>

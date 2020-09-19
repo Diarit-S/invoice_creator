@@ -24,7 +24,7 @@
         </template>
 
     </vue-html2pdf>
-    <creator-form :content="content"></creator-form>
+    <creator-form :content="content" @generateReport="generateReport"></creator-form>
     <b-button size="is-medium" style="position:fixed; bottom: 50px" @click="generateReport" type="is-info" icon-left="file-pdf-outline">
       PDF
     </b-button>
@@ -42,7 +42,11 @@ export default {
   data() {
     return {
       content: {
-        type: 'devis'
+        content: {
+          paper: {},
+          amounts: {}
+        },
+        clients: []
       }
     }
   },
@@ -52,7 +56,9 @@ export default {
     CreatorForm
   },
   methods: {
-    generateReport () {
+    async generateReport(content) {
+      console.log(content)
+      this.content = await content
       this.$refs.html2Pdf.generatePdf()
     }
   }
