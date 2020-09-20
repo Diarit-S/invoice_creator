@@ -2,6 +2,15 @@
   div.pdf-content
     div(style="min-width: 375px")
 
+    b-button(
+      size="is-medium" 
+      style="position:fixed; bottom: 100px; z-index: 10000" 
+      @click="showLayout" 
+      type="is-info" 
+      icon-left="file-pdf-outline"
+    )
+      | Voir le rendu
+
     left-side(
       :currentPaper="currentPaper"
       :amountsData="amountsData"
@@ -142,6 +151,9 @@ export default {
     },
     generateReport(clients) {
       this.$emit('generateReport', {content: this.fullPdfContent, clients})
+    },
+    showLayout() {
+      this.$emit('showLayout', {content: this.fullPdfContent, clients: []})
     }
   },
   created() {
