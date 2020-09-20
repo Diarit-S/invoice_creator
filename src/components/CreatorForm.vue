@@ -2,20 +2,12 @@
   div.pdf-content
     div(style="min-width: 375px")
 
-    b-button(
-      size="is-medium" 
-      style="position:fixed; bottom: 100px; z-index: 10000" 
-      @click="showLayout" 
-      type="is-info" 
-      icon-left="file-pdf-outline"
-    )
-      | Voir le rendu
-
     left-side(
       :currentPaper="currentPaper"
       :amountsData="amountsData"
       @openClientModal="openClientModal"
       @generateReport="generateReport"
+      @hydrateTable="hydrateTable"
     )
 
     .pdf-content__right
@@ -28,13 +20,6 @@
       .pdf-content__right__config
         b-button.is-info(size="is-medium" icon-left="plus-circle-outline" @click="createNewField")
 
-    b-button.save-button(
-      size="is-medium" 
-      @click="handleDocumentSave" 
-      type="is-success" 
-      icon-left="content-save-all-outline"
-    ) Enregistrer
-
     b-modal(v-model="isClientModalOpen" style="z-index: 1000")
       .client-modal-container
         b-field(label="Nom et Prénom" label-position="on-border" autocomplete="off")
@@ -43,6 +28,8 @@
           b-input(v-model="newClient.address" autocomplete="off")
         b-field(label="Code postale et ville" label-position="on-border" autocomplete="off")
           b-input(v-model="newClient.zipCodeAndCity" autocomplete="off")
+        b-field(label="Addresse chantier" label-position="on-border" autocomplete="off")
+          b-input(v-model="newClient.workAddress" autocomplete="off")
 
         b-button(
           size="is-small" 
@@ -56,6 +43,8 @@
 import CustomField from "./CustomField";
 
 import LeftSide from "./LeftSide";
+
+import clients from "@/utils/clients.json";
 
 export default {
   name: "CreatorForm",
@@ -78,7 +67,8 @@ export default {
       newClient: {
         fullName: '',
         address: '',
-        zipCodeAndCity: ''
+        zipCodeAndCity: '',
+        workAddress: "Identique à l'adresse client",
       }
     }
   },
@@ -115,6 +105,9 @@ export default {
         paper: this.currentPaper,
         amounts: this.amountsData
       }
+    },
+    clientsToAdd() {
+      return clients
     }
   },
   methods: {
@@ -126,8 +119,7 @@ export default {
       this.clients = clients.data
     },
     async createClient() {
-      const { fullName, address, zipCodeAndCity } = this.newClient
-      const newClient = await this.$http.post('/client/createClient', { fullName, address, zipCodeAndCity }) 
+      const newClient = await this.$http.post('/client/createClient', this.newClient) 
       console.log(newClient)
     },
     async createPaper() {
@@ -152,8 +144,8 @@ export default {
     generateReport(clients) {
       this.$emit('generateReport', {content: this.fullPdfContent, clients})
     },
-    showLayout() {
-      this.$emit('showLayout', {content: this.fullPdfContent, clients: []})
+    hydrateTable(clients) {
+      this.$emit('hydrateTable', {content: this.fullPdfContent, clients})
     }
   },
   created() {
@@ -249,10 +241,4 @@ export default {
   margin: auto;
 }
 
-.save-button {
-  position: fixed; 
-  bottom: 0px; 
-  left: 50%;
-  border-radius: 6px 6px 0 0;
-}
 </style>

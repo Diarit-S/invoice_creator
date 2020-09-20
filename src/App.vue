@@ -5,7 +5,7 @@
     <creator-form 
       :content="content" 
       @generateReport="generateReport"
-      @showLayout="showLayoutFunc"
+      @hydrateTable="hydrateTable"
     ></creator-form>
     <b-button size="is-medium" style="position:fixed; bottom: 50px" @click="generateReport" type="is-info" icon-left="file-pdf-outline">
       PDF
@@ -16,7 +16,6 @@
 </template>
 
 <script>
-// import VueHtml2pdf from 'vue-html2pdf'
 import PdfContent from './components/PdfContent'
 import CreatorForm from './components/CreatorForm'
 
@@ -34,12 +33,10 @@ export default {
           amounts: {}
         },
         clients: []
-      },
-      showLayout: false
+      }
     }
   },
   components: {
-    // VueHtml2pdf,
     PdfContent,
     CreatorForm
   },
@@ -55,10 +52,10 @@ export default {
       }).from(element).save()
       element.style.display = 'none'
     },
-    async showLayoutFunc(content) {
-      console.log(content)
-      this.content = await content
-      this.showLayout = !this.showLayout
+    hydrateTable(content) {
+      this.content = content
+      const element = this.$refs.elementToExport.$el
+      element.style.display === 'block' ? element.style.display = 'none' : element.style.display = 'block'
     }
   }
 }

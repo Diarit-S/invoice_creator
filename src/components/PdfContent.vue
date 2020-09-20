@@ -1,25 +1,28 @@
 <template lang="pug">
   .pdf-content
     p {{ content.content.paper.type }}
+    img(
+      src="@/assets/drita_infos.jpg"
+    )
     section(v-for="section in sectionsDevidedFields" class="pdf-item")
       b-table(
         :data="section"
         bordered
         style="max-width: 780px"
       )
-        b-table-column(field="content" label="Description" width="20" v-slot="props")
+        b-table-column(field="content" label="Description" width="405" v-slot="props" header-class="table-head")
           div( v-html="props.row.content")
 
-        b-table-column(field="unitValue" label="Unité" width="10" v-slot="props")
+        b-table-column(field="unitValue" label="Unité" width="125" v-slot="props" header-class="table-head")
           template(v-if="props.row.unit === 'Ensemble'")
             | {{ props.row.unit }}
           template(v-else)
             | {{ props.row.unitValue }} {{ props.row.unit }}
 
-        b-table-column(field="unitPrice" label="Prix unitaire" width="10" v-slot="props")
+        b-table-column(field="unitPrice" label="Prix unitaire" width="125" v-slot="props" header-class="table-head")
           | {{ props.row.unitPrice }}
 
-        b-table-column(field="amount" label="Prix HT" width="10" v-slot="props")
+        b-table-column(field="amount" label="Prix HT" width="125" v-slot="props" header-class="table-head")
           | {{ props.row.amount }}
 
     .html2pdf__page-break
@@ -73,12 +76,13 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 
 .pdf-content {
   width: 100%;
   background-color: white;
   display: none;
+
 }
 
 .pdf-item {
