@@ -26,6 +26,19 @@
           | {{ props.row.amount }}
 
     .html2pdf__page-break
+
+    section
+      b-table.price-table(
+        :data="this.amountFields"
+        bordered
+        style="max-width: 780px"
+      )
+        b-table-column(field="key" width="405" v-slot="props" header-class="table-head")
+          | {{props.row.key}}
+
+        b-table-column(field="value" width="405" v-slot="props" header-class="table-head")
+          | {{props.row.value}}
+
 </template>
 
 <script>
@@ -46,6 +59,13 @@ export default {
         return this.chunkArray(this.content.content.paper.fields)
       }
       return []
+    },
+    amountFields() {
+      return [
+        {key: 'htPrice', value: this.content.content.amounts.totalWithoutTaxes},
+        {key: 'taxeAmount', value: this.content.content.amounts.taxeAmount},
+        {key: 'totalAmount', value: this.content.content.amounts.totalAmount}
+      ]
     }
   },
   methods: {

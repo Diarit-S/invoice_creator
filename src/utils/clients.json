@@ -1,0 +1,347 @@
+{
+  "clients": [
+    {
+      "client_ID": "2",
+      "fullName": "Mr et Mme Péan",
+      "address": "18 rue de Musselburgh",
+      "zipCodeAndCity": "94500 Champigny-sur-Marne",
+      "workAddress": "Identique à l'adresse client"
+    },
+    {
+      "client_ID": "3",
+      "fullName": "Mme Maud Marescaux",
+      "address": "19 rue des Petits carreaux",
+      "zipCodeAndCity": "75012 Paris",
+      "workAddress": "Identique à l'adresse client"
+    },
+    {
+      "client_ID": "4",
+      "fullName": "Choke Industry",
+      "address": "53 rue du Château",
+      "zipCodeAndCity": "92600 Asnière",
+      "workAddress": "133 rue championnet 75019 Paris"
+    },
+    {
+      "client_ID": "5",
+      "fullName": "SCI Paradis",
+      "address": "2 rue Bourbon le Château",
+      "zipCodeAndCity": "75006 Paris",
+      "workAddress": "32 rue de Paradis 75010 Paris"
+    },
+    {
+      "client_ID": "6",
+      "fullName": "Mr Pierre Guimard",
+      "address": "80 Boulevard Michelet ",
+      "zipCodeAndCity": "13008 Marseille",
+      "workAddress": "Identique à l'adresse client"
+    },
+    {
+      "client_ID": "7",
+      "fullName": "Mr Mathieu Tessier",
+      "address": "25 Avenue des Tuyas",
+      "zipCodeAndCity": "92600 Asnières",
+      "workAddress": "Identique à l'adresse client"
+    },
+    {
+      "client_ID": "8",
+      "fullName": "Mr Hambourger",
+      "address": "2 rue de Bourbon-le-Château",
+      "zipCodeAndCity": "75006 Paris",
+      "workAddress": "78, rue de Monceau 75008 Paris"
+    },
+    {
+      "client_ID": "9",
+      "fullName": "Sud Creation",
+      "address": "ZAC du Blavet 3 rue de l'industrie",
+      "zipCodeAndCity": "83520 Roquebrune sur Argens",
+      "workAddress": "40 Cours Michelet 92800 Puteaux"
+    },
+    {
+      "client_ID": "10",
+      "fullName": "Tenue Complete",
+      "address": "70 Boulevard Chanzy",
+      "zipCodeAndCity": "93100 Montreuil",
+      "workAddress": "Identique à l'adresse client"
+    },
+    {
+      "client_ID": "11",
+      "fullName": "Sysmo Records",
+      "address": "133 rue Championnet",
+      "zipCodeAndCity": "75018 Paris",
+      "workAddress": "Identique à l'adresse client"
+    },
+    {
+      "client_ID": "12",
+      "fullName": "DROP Records",
+      "address": "156 rue Championnet",
+      "zipCodeAndCity": "75018 Paris",
+      "workAddress": "Identique à l'adresse client"
+    },
+    {
+      "client_ID": "13",
+      "fullName": "Mme Follot",
+      "address": "1 Sente du Clos d'Arcy",
+      "zipCodeAndCity": "78300 Poissy",
+      "workAddress": "Identique à l'adresse client"
+    },
+    {
+      "client_ID": "14",
+      "fullName": "Mme Girard",
+      "address": "6 rue Jean Louis Louet",
+      "zipCodeAndCity": "92700 Colombes",
+      "workAddress": "78 rue du Rocher 75008 Paris"
+    },
+    {
+      "client_ID": "15",
+      "fullName": "Mme Branet",
+      "address": "14 rue Moreau",
+      "zipCodeAndCity": "75012 Paris",
+      "workAddress": "Identique à l'adresse client"
+    },
+    {
+      "client_ID": "16",
+      "fullName": "Les Studios Saint-Germain",
+      "address": "54 rue de Seine",
+      "zipCodeAndCity": "75006 Paris",
+      "workAddress": "Identique à l'adresse client"
+    },
+    {
+      "client_ID": "17",
+      "fullName": "Groupe BGF - STRUCTURE",
+      "address": "12 rue de Picardie",
+      "zipCodeAndCity": "75003 Paris",
+      "workAddress": "Identique à l'adresse client"
+    },
+    {
+      "client_ID": "18",
+      "fullName": "Mme Eloise Provoost",
+      "address": "104 Avenue Daumesnil",
+      "zipCodeAndCity": "75012 Paris",
+      "workAddress": "Identique à l'adresse client"
+    },
+    {
+      "client_ID": "19",
+      "fullName": "Mr Nivesse Laurent",
+      "address": "40 Boulevard Pierre Renet",
+      "zipCodeAndCity": "94370 Sucy-en-Brie",
+      "workAddress": "Identique à l'adresse client"
+    },
+    {
+      "client_ID": "20",
+      "fullName": "Les Ateliers P, SAS d'Architecture",
+      "address": "7, rue du Docteur Paquelin",
+      "zipCodeAndCity": "75020 Paris",
+      "workAddress": "20 rue Moreau 75012 Paris"
+    },
+    {
+      "client_ID": "21",
+      "fullName": "Mr et Mme Bertrand",
+      "address": "2, rue Dupuy",
+      "zipCodeAndCity": "75016 Paris",
+      "workAddress": "Identique à l'adresse client"
+    },
+    {
+      "client_ID": "22",
+      "fullName": "School Gallery Paris",
+      "address": "322 rue Saint Martin",
+      "zipCodeAndCity": "75003 Paris",
+      "workAddress": "Identique à l'adresse client"
+    },
+    {
+      "client_ID": "23",
+      "fullName": "Mr Codromaz Gilles",
+      "address": "104 Avenue Daumesnil",
+      "zipCodeAndCity": "75012 Paris",
+      "workAddress": "Identique à l'adresse client"
+    },
+    {
+      "client_ID": "24",
+      "fullName": "Mr Phillipe Simon",
+      "address": "12 rue Moreau",
+      "zipCodeAndCity": "75012 Paris",
+      "workAddress": "Identique à l'adresse client"
+    },
+    {
+      "client_ID": "25",
+      "fullName": "Mr Pierre Guimard",
+      "address": "85, rue des Martyrs",
+      "zipCodeAndCity": "75018 Paris",
+      "workAddress": "59 rue Caulaincourt 75018 Paris"
+    },
+    {
+      "client_ID": "26",
+      "fullName": "Mr Eric Larcher",
+      "address": "4 rue Jean Baptiste Clément",
+      "zipCodeAndCity": "94250 Gentilly",
+      "workAddress": "Identique à l'adresse client"
+    },
+    {
+      "client_ID": "32",
+      "fullName": "Melle Louise Choueka",
+      "address": "28, rue Neuve des Boulets",
+      "zipCodeAndCity": "75011 Paris",
+      "workAddress": "Identique à l'adresse client"
+    },
+    {
+      "client_ID": "33",
+      "fullName": "Melle Anjolras",
+      "address": "46, rue Vitruve",
+      "zipCodeAndCity": "75020 Paris",
+      "workAddress": "Identique à l'adresse client"
+    },
+    {
+      "client_ID": "34",
+      "fullName": "Mme Cindy Wasson",
+      "address": "8 impasse Guéménée",
+      "zipCodeAndCity": "75004 Paris",
+      "workAddress": "Identique à l'adresse client"
+    },
+    {
+      "client_ID": "35",
+      "fullName": "Mme Girard.",
+      "address": "6 rue Jean Louis Louet",
+      "zipCodeAndCity": "92700 Colombes",
+      "workAddress": "26, rue Pasteur 95880 Enghien-les-Bains"
+    },
+    {
+      "client_ID": "36",
+      "fullName": "Syndic de Copropriété HJS",
+      "address": "59 rue Raspail",
+      "zipCodeAndCity": "94700 Maison-Alfort",
+      "workAddress": "78 Avenue de la République 94700 Maison-Alfort"
+    },
+    {
+      "client_ID": "37",
+      "fullName": "Mr et Mme Letier-Lacaze",
+      "address": "2 rue Erlanger",
+      "zipCodeAndCity": "75016 Paris",
+      "workAddress": "Identique à l'adresse client"
+    },
+    {
+      "client_ID": "39",
+      "fullName": "Volcan Design",
+      "address": "4, rue de la Petite Pierre",
+      "zipCodeAndCity": "75010 Paris",
+      "workAddress": "Identique à l'adresse client"
+    },
+    {
+      "client_ID": "40",
+      "fullName": "Mr Hambourger",
+      "address": "78 rue Monceau",
+      "zipCodeAndCity": "75008 Paris",
+      "workAddress": "Identique à l'adresse client"
+    },
+    {
+      "client_ID": "41",
+      "fullName": "Alizée Dubois et Paul Velara",
+      "address": "4, rue Laborde",
+      "zipCodeAndCity": "75008 Paris",
+      "workAddress": "Identique à l'adresse client"
+    },
+    {
+      "client_ID": "42",
+      "fullName": "Avni Jupolli",
+      "address": "7, rue du séminaire de Conflans",
+      "zipCodeAndCity": "94200 Charenton-le-Pont",
+      "workAddress": "Identique à l'adresse client"
+    },
+    {
+      "client_ID": "43",
+      "fullName": "Mr Christian Cointat",
+      "address": "89 rue du Faubourg St Denis",
+      "zipCodeAndCity": "75010 Paris",
+      "workAddress": "Identique à l'adresse client"
+    },
+    {
+      "client_ID": "44",
+      "fullName": "Mme Djahandari",
+      "address": "10, passage du chantier",
+      "zipCodeAndCity": "75012 Paris",
+      "workAddress": "Identique à l'adresse client"
+    },
+    {
+      "client_ID": "45",
+      "fullName": "Entreprise Djahandari",
+      "address": "12, rue Moreau",
+      "zipCodeAndCity": "75012 Paris",
+      "workAddress": "Identique à l'adresse client"
+    },
+    {
+      "client_ID": "46",
+      "fullName": "Mme Revailler",
+      "address": "21, rue Pasteur",
+      "zipCodeAndCity": "95880 Enghien-les-Bains",
+      "workAddress": "Identique à l'adresse client"
+    },
+    {
+      "client_ID": "47",
+      "fullName": "Mr et Mme Vendrand",
+      "address": "62, rue Gay Lussac",
+      "zipCodeAndCity": "75005 Paris",
+      "workAddress": "Identique à l'adresse client"
+    },
+    {
+      "client_ID": "48",
+      "fullName": "Mme BOSSET",
+      "address": "43, rue de Lyon",
+      "zipCodeAndCity": "75012 Paris",
+      "workAddress": "Identique à l'adresse client"
+    },
+    {
+      "client_ID": "49",
+      "fullName": "Mme Sabatier",
+      "address": "172 Avenue de Choisy",
+      "zipCodeAndCity": "75013 Paris",
+      "workAddress": "Identique à l'adresse client"
+    },
+    {
+      "client_ID": "50",
+      "fullName": "SELARL Saragoussi Vendrand",
+      "address": "8, rue de Ventadour",
+      "zipCodeAndCity": "75001 Paris",
+      "workAddress": "Identique à l'adresse client"
+    },
+    {
+      "client_ID": "51",
+      "fullName": "SCI MC",
+      "address": "6, rue de Nice",
+      "zipCodeAndCity": "75011 Paris",
+      "workAddress": "Identique à l'adresse client"
+    },
+    {
+      "client_ID": "52",
+      "fullName": "Mr et Mme Bastard",
+      "address": "44, rue de Charenton",
+      "zipCodeAndCity": "75012 Paris",
+      "workAddress": "Identique à l'adresse client"
+    },
+    {
+      "client_ID": "53",
+      "fullName": "Mr Fherrera",
+      "address": "10-12 rue Lauzin",
+      "zipCodeAndCity": "75019 Paris",
+      "workAddress": "Identique à l'adresse client"
+    },
+    {
+      "client_ID": "54",
+      "fullName": "ESAJ",
+      "address": "49, rue de Bagnolet",
+      "zipCodeAndCity": "75020 Paris",
+      "workAddress": "Identique à l'adresse client"
+    },
+    {
+      "client_ID": "55",
+      "fullName": "Mme Iliriana Salihaj",
+      "address": "3 square Dolet",
+      "zipCodeAndCity": "94140 Alfortville",
+      "workAddress": "Identique à l'adresse client"
+    },
+    {
+      "client_ID": "1",
+      "fullName": "Mr et Mme Dupond",
+      "address": "12 rue des Lilas",
+      "zipCodeAndCity": "75010 Paris",
+      "workAddress": "Identique à l'adresse client"
+      }
+    ]
+}
