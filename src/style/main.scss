@@ -37,6 +37,9 @@
     border: none !important;
 }
 
+.table {
+   margin-top: 10px !important; 
+}
 
 
 .table-head {
@@ -45,6 +48,15 @@
 
 .price-table thead {
     display: none !important;
+}
+
+ul {
+    transform: translateX(10px);
+}
+
+.right-bottom {
+    text-align: right !important;
+    vertical-align: bottom !important;
 }
 
 // th, td {

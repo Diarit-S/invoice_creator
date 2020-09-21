@@ -61,7 +61,8 @@ export default {
         ],
         TVAPercent: 10,
         documentNumber: 1,
-        clientId: '5f5e301e972a0900171c8fd2'
+        clientId: '5f5e301e972a0900171c8fd2',
+        creationDate: new Date()
       },
       isClientModalOpen: false,
       newClient: {

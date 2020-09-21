@@ -48,7 +48,8 @@ export default {
       window.scrollTo(0, 0)
       element.style.display = 'block'
       await html2pdf().set({
-        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] },
+        image: { type: 'jpeg', quality: 1 },
       }).from(element).save()
       element.style.display = 'none'
     },
