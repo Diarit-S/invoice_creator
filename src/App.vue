@@ -10,7 +10,7 @@
     <b-button size="is-medium" style="position:fixed; bottom: 50px" @click="generateReport" type="is-info" icon-left="file-pdf-outline">
       PDF
     </b-button>
-
+    <img src="@/assets/drita_infos.jpg" style="visibility: hidden" ref="test"/>
     </div>
   </div>
 </template>
@@ -20,6 +20,10 @@ import PdfContent from './components/PdfContent'
 import CreatorForm from './components/CreatorForm'
 
 import html2pdf from 'html2pdf.js'
+
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 export default {
   name: 'App',
@@ -33,7 +37,8 @@ export default {
           amounts: {}
         },
         clients: []
-      }
+      },
+      ok: 'testttt'
     }
   },
   components: {
@@ -58,6 +63,33 @@ export default {
       const element = this.$refs.elementToExport.$el
       element.style.display === 'block' ? element.style.display = 'none' : element.style.display = 'block'
     }
+  },
+  computed: {
+    pdfTemplate() {
+      return {
+        content: [
+          this.ok,
+          {
+            layout: 'lightHorizontalLines', // optional
+            table: {
+              // headers are automatically repeated if the table spans over multiple pages
+              // you can declare how many rows should be treated as headers
+              headerRows: 1,
+              widths: [ '*', 'auto', 100, '*' ],
+
+              body: [
+                [ 'First', 'Second', 'Third', 'The last one' ],
+                [ { text: 'Value 1', fillColor: '#000111'}, 'Value 2', 'Value 3', 'Value 4' ],
+                [ { text: 'Bold value', bold: true }, 'Val 2', 'Val 3', 'Val 4' ]
+              ]
+            }
+          }
+        ]
+      }
+    }
+  },
+  mounted() {
+    pdfMake.createPdf(this.pdfTemplate).open();
   }
 }
 </script>
