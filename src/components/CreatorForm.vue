@@ -3,8 +3,9 @@
     div(style="min-width: 375px")
 
     left-side(
-      :currentPaper="currentPaper"
+      :currentPaper="content.currentPaper"
       :amountsData="amountsData"
+      :clients="content.clients"
       @openClientModal="openClientModal"
       @generateReport="generateReport"
       @hydrateTable="hydrateTable"
@@ -12,7 +13,7 @@
 
     .pdf-content__right
       custom-field(
-        v-for="(field, index) in currentPaper.fields"
+        v-for="(field, index) in content.currentPaper.fields"
         :key="'field' + index"
         :field="field"
       )
@@ -54,16 +55,6 @@ export default {
   },
   data() {
     return {
-      currentPaper: {
-        type: 'quote',
-        fields: [
-          {unit: 'm²'}
-        ],
-        TVAPercent: 10,
-        documentNumber: 1,
-        clientId: '5f5e301e972a0900171c8fd2',
-        creationDate: new Date()
-      },
       isClientModalOpen: false,
       newClient: {
         fullName: '',
@@ -81,7 +72,7 @@ export default {
   },
   computed: {
     totalWithoutTaxes() {
-      return parseFloat(this.currentPaper.fields.reduce((acc, currentField) => {
+      return parseFloat(this.content.currentPaper.fields.reduce((acc, currentField) => {
         if (currentField.amount) {
           acc += currentField.amount
         }
@@ -89,7 +80,7 @@ export default {
       }, 0).toFixed(2))
     },
     taxeAmount() {
-      return parseFloat((this.totalWithoutTaxes * (this.currentPaper.TVAPercent / 100)).toFixed(2))
+      return parseFloat((this.totalWithoutTaxes * (this.content.currentPaper.TVAPercent / 100)).toFixed(2))
     },
     totalAmount() {
       return parseFloat((this.totalWithoutTaxes + this.taxeAmount).toFixed(2))
@@ -101,42 +92,33 @@ export default {
         totalAmount: this.totalAmount
       }
     },
-    fullPdfContent() {
-      return {
-        paper: this.currentPaper,
-        amounts: this.amountsData
-      }
-    },
     clientsToAdd() {
       return clients
     }
   },
   methods: {
     createNewField() {
-      this.currentPaper.fields.push({unit: 'm²'});
+      this.content.currentPaper.fields.push({unit: 'm²'});
     },
     async getClients() {
       const clients = await this.$http.get('/client/')
-      this.clients = clients.data
+      this.content.clients = clients.data
     },
     async createClient() {
       const newClient = await this.$http.post('/client/createClient', this.newClient) 
       console.log(newClient)
     },
     async createPaper() {
-      const newPaper = await this.$http.post('/paper/createPaper', this.currentPaper) 
+      const newPaper = await this.$http.post('/paper/createPaper', this.content.currentPaper) 
       console.log(newPaper)
     },
-    handleDocumentSave() {
-      console.log(this.currentPaper.fields)
-    },
     async getLastDocumentNumber() {
-      const lastDocumentNumber = await this.$http.get(`/paper/getLastNumber/${this.currentPaper.type}`)
+      const lastDocumentNumber = await this.$http.get(`/paper/getLastNumber/${this.content.currentPaper.type}`)
       //- .data ....
-      this.currentPaper.documentNumber = lastDocumentNumber
+      this.content.currentPaper.documentNumber = lastDocumentNumber
     },
     async getLastDocumentNumberByType() {
-      const lastNumber = await this.$http.get(`/paper/getLastNumberOfType/${this.currentPaper.type}`)
+      const lastNumber = await this.$http.get(`/paper/getLastNumberOfType/${this.content.currentPaper.type}`)
       console.log(lastNumber)
     },
     openClientModal() {
@@ -156,7 +138,7 @@ export default {
     //- Create a watch for document type and recall getLastDocumentNumber
   },
   watch: {
-    'currentPaper.type': function() {
+    'content.currentPaper.type': function() {
       this.getLastDocumentNumberByType()
     }
   }

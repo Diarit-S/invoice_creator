@@ -83,7 +83,6 @@ export default {
         }
       ],
       isClientModalOpen: false,
-      clients: [],
     };
   },
   props: {
@@ -94,13 +93,13 @@ export default {
     amountsData: {
       type: Object,
       required: true
+    },
+    clients: {
+      type: Array,
+      default: () => {return []}
     }
   },
   methods: {
-    async getClients() {
-      const clients = await this.$http.get('/client/')
-      this.clients = clients.data
-    },
     openClientModal() {
       this.$emit('openClientModal')
     },
@@ -124,7 +123,7 @@ export default {
     }
   },
   created() {
-    this.getClients()
+    // this.getClients()
     this.getLastDocumentNumberByType()
   },
   watch: {

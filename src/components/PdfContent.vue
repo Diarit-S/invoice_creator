@@ -1,54 +1,54 @@
 <template lang="pug">
   .pdf-content
-    div.pdf-content__head
-      img(
-        src="@/assets/drita_infos.jpg"
-      )
-      div.pdf-content__head__right-card
-        .document-type 
-          span {{ documentTypes[content.content.paper.type] }}
-          span n°{{ content.content.paper.documentNumber }}
-        .document-date 
-          span Date
-          span {{ creationDate }}
-        .document-client
-          span {{ currentClient.fullName }}
-          span {{ currentClient.address }}
-          span {{ currentClient.zipCodeAndCity }}
-    section(v-for="section in sectionsDevidedFields" class="pdf-item")
-      b-table(
-        :data="section"
-        bordered
-        style="max-width: 760px"
-      )
-        b-table-column(field="content" label="Description" width="385" v-slot="props" header-class="table-head")
-          div( v-html="props.row.content")
+    //- div.pdf-content__head
+    //-   img(
+    //-     src="@/assets/drita_infos.jpg"
+    //-   )
+    //-   div.pdf-content__head__right-card
+    //-     .document-type 
+    //-       span {{ documentTypes[content.content.paper.type] }}
+    //-       span n°{{ content.content.paper.documentNumber }}
+    //-     .document-date 
+    //-       span Date
+    //-       span {{ creationDate }}
+    //-     .document-client
+    //-       span {{ currentClient.fullName }}
+    //-       span {{ currentClient.address }}
+    //-       span {{ currentClient.zipCodeAndCity }}
+    //- section(v-for="section in sectionsDevidedFields" class="pdf-item")
+    //-   b-table(
+    //-     :data="section"
+    //-     bordered
+    //-     style="max-width: 760px"
+    //-   )
+    //-     b-table-column(field="content" label="Description" width="385" v-slot="props" header-class="table-head")
+    //-       div( v-html="props.row.content")
 
-        b-table-column(field="unitValue" label="Unité" width="125" v-slot="props" header-class="table-head" cell-class="right-bottom")
-          template(v-if="props.row.unit === 'Ensemble'")
-            | {{ props.row.unit }}
-          template(v-else)
-            | {{ props.row.unitValue }} {{ props.row.unit }}
+    //-     b-table-column(field="unitValue" label="Unité" width="125" v-slot="props" header-class="table-head" cell-class="right-bottom")
+    //-       template(v-if="props.row.unit === 'Ensemble'")
+    //-         | {{ props.row.unit }}
+    //-       template(v-else)
+    //-         | {{ props.row.unitValue }} {{ props.row.unit }}
 
-        b-table-column(field="unitPrice" label="Prix unitaire" width="125" v-slot="props" header-class="table-head" cell-class="right-bottom")
-          | {{ props.row.unitPrice | priceFormat }}
+    //-     b-table-column(field="unitPrice" label="Prix unitaire" width="125" v-slot="props" header-class="table-head" cell-class="right-bottom")
+    //-       | {{ props.row.unitPrice | priceFormat }}
 
-        b-table-column(field="amount" label="Prix HT" width="125" v-slot="props" header-class="table-head" cell-class="right-bottom")
-          | {{ props.row.amount | priceFormat }}
+    //-     b-table-column(field="amount" label="Prix HT" width="125" v-slot="props" header-class="table-head" cell-class="right-bottom")
+    //-       | {{ props.row.amount | priceFormat }}
 
-    //- .html2pdf__page-break
+    //- //- .html2pdf__page-break
 
-    section
-      b-table.price-table(
-        :data="this.amountFields"
-        bordered
-        style="max-width: 300px; margin-left: auto"
-      )
-        b-table-column(field="key" width="100" v-slot="props" header-class="table-head")
-          | {{ props.row.key }}
+    //- section
+    //-   b-table.price-table(
+    //-     :data="this.amountFields"
+    //-     bordered
+    //-     style="max-width: 300px; margin-left: auto"
+    //-   )
+    //-     b-table-column(field="key" width="100" v-slot="props" header-class="table-head")
+    //-       | {{ props.row.key }}
 
-        b-table-column(field="value" width="200" v-slot="props" header-class="table-head" cell-class="right-bottom")
-          | {{ props.row.value | priceFormat }}
+    //-     b-table-column(field="value" width="200" v-slot="props" header-class="table-head" cell-class="right-bottom")
+    //-       | {{ props.row.value | priceFormat }}
 
 </template>
 
@@ -122,7 +122,13 @@ export default {
       }
       
       return results;
-    }   
+    }
+    // generatePdf() {
+    //   const doc = new jsPDF()
+    //   doc.text("Hello world!", 10, 10)
+    //   doc.addImage(this.$refs.imaaage, "JPEG", 10, 10, 100, 50)
+    //   doc.save("testaa.pdf")
+    // } 
   }
 }
 </script>

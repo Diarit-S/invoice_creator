@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <img src="./assets/drita_infos.jpg" ref="imaaage" alt="">
     <div ref="container">
     <pdf-content :content="content" slot='pdf-content' ref="elementToExport"></pdf-content>
     <creator-form 
@@ -20,22 +19,25 @@
 import PdfContent from './components/PdfContent'
 import CreatorForm from './components/CreatorForm'
 
-import { jsPDF } from "jspdf";
+// import { jsPDF } from "jspdf";
 
 export default {
   name: 'App',
   data() {
     return {
       content: {
-        content: {
-          paper: {
-            fields: []
-          },
-          amounts: {}
+        currentPaper: {
+          type: 'quote',
+          fields: [
+            {unit: 'm²'}
+          ],
+          TVAPercent: 10,
+          documentNumber: 1,
+          clientId: '5f5e301e972a0900171c8fd2',
+          creationDate: new Date()
         },
         clients: []
       },
-      ok: 'testttt'
     }
   },
   components: {
@@ -54,12 +56,11 @@ export default {
     }
   },
   computed: {
-  },
-  mounted() {
-    const doc = new jsPDF()
-    doc.text("Hello world!", 10, 10)
-    doc.addImage(this.$refs.imaaage, "JPEG", 10, 10, 100, 50)
-    doc.save("testaa.pdf")
+    currentClient() {
+      return this.content.clients.find(client => {
+        return client._id === this.content.content.paper.clientId
+      }) || {}
+    }
   }
 }
 </script>
