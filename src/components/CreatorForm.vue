@@ -7,7 +7,7 @@
       :amountsData="amountsData"
       :clients="content.clients"
       @openClientModal="openClientModal"
-      @generateReport="generateReport"
+      @generatePdf="generatePdf"
     )
 
     .pdf-content__right
@@ -117,7 +117,7 @@ export default {
     openClientModal() {
       this.isClientModalOpen = true
     },
-    generateReport() {
+    generatePdf() {
       this.$emit('generatePdf')
     }
   },

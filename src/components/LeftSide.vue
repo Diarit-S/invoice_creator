@@ -99,7 +99,7 @@ export default {
       this.$emit('openClientModal')
     },
     async createPaper() {
-      this.$emit('generateReport')
+      this.$emit('generatePdf')
     },
     async getLastDocumentNumberByType() {
       const lastNumber = await this.$http.get(`/paper/getLastNumberOfType/${this.currentPaper.type}`)

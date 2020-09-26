@@ -1,17 +1,21 @@
 <template>
   <div id="app">
-    <router-view></router-view>
+    <creator-form 
+      :content="content" 
+      @generatePdf="generatePdf"
+    ></creator-form>
+    <img src="@/assets/drita_infos.jpg" style="visibility: hidden" ref="test"/>
   </div>
 </template>
 
 <script>
-// import CreatorForm from './components/CreatorForm'
+import CreatorForm from '../components/CreatorForm'
 
 // import { jsPDF } from 'jspdf'
 // import 'jspdf-autotable'
 
 export default {
-  name: 'App',
+  name: 'Creator',
   data() {
     return {
       content: {
@@ -29,9 +33,9 @@ export default {
       },
     }
   },
-  // components: {
-  //   CreatorForm
-  // },
+  components: {
+    CreatorForm
+  },
   methods: {
     generatePdf() {
       // console.log(this.content)
@@ -67,14 +71,3 @@ export default {
   }
 }
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
-  margin-top: 10px;
-  padding: 20px;
-}
-</style>
