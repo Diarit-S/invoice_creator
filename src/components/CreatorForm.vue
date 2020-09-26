@@ -8,7 +8,6 @@
       :clients="content.clients"
       @openClientModal="openClientModal"
       @generateReport="generateReport"
-      @hydrateTable="hydrateTable"
     )
 
     .pdf-content__right
@@ -21,22 +20,16 @@
       .pdf-content__right__config
         b-button.is-info(size="is-medium" icon-left="plus-circle-outline" @click="createNewField")
 
-    b-modal(v-model="isClientModalOpen" style="z-index: 1000")
-      .client-modal-container
-        b-field(label="Nom et Prénom" label-position="on-border" autocomplete="off")
-          b-input(v-model="newClient.fullName" autocomplete="off")
-        b-field(label="Adresse" label-position="on-border" autocomplete="off")
-          b-input(v-model="newClient.address" autocomplete="off")
-        b-field(label="Code postale et ville" label-position="on-border" autocomplete="off")
-          b-input(v-model="newClient.zipCodeAndCity" autocomplete="off")
-        b-field(label="Addresse chantier" label-position="on-border" autocomplete="off")
-          b-input(v-model="newClient.workAddress" autocomplete="off")
-
-        b-button(
-          size="is-small" 
-          @click="createClient" 
-          type="is-info"
-        ) Valider
+    b-modal(
+      v-model="isClientModalOpen"
+      has-modal-card
+      trap-focus
+      :destroy-on-hide="false"
+      aria-role="dialog"
+      aria-modal
+    )
+      template(#default="props")
+        client-modal(:newClient="newClient" @createClient="createClient(props)")
 </template>
 
 <script>
@@ -45,13 +38,15 @@ import CustomField from "./CustomField";
 
 import LeftSide from "./LeftSide";
 
-import clients from "@/utils/clients.json";
+import ClientModal from './ClientModal'
+
 
 export default {
   name: "CreatorForm",
   components: {
     CustomField,
-    LeftSide
+    LeftSide,
+    ClientModal
   },
   data() {
     return {
@@ -91,9 +86,6 @@ export default {
         taxeAmount: this.taxeAmount,
         totalAmount: this.totalAmount
       }
-    },
-    clientsToAdd() {
-      return clients
     }
   },
   methods: {
@@ -104,9 +96,10 @@ export default {
       const clients = await this.$http.get('/client/')
       this.content.clients = clients.data
     },
-    async createClient() {
+    async createClient(props) {
       const newClient = await this.$http.post('/client/createClient', this.newClient) 
-      console.log(newClient)
+      props.close()
+      this.content.clients.push(newClient.data)
     },
     async createPaper() {
       const newPaper = await this.$http.post('/paper/createPaper', this.content.currentPaper) 
@@ -124,11 +117,8 @@ export default {
     openClientModal() {
       this.isClientModalOpen = true
     },
-    generateReport(clients) {
-      this.$emit('generateReport', {content: this.fullPdfContent, clients})
-    },
-    hydrateTable(clients) {
-      this.$emit('hydrateTable', {content: this.fullPdfContent, clients})
+    generateReport() {
+      this.$emit('generatePdf')
     }
   },
   created() {

@@ -52,11 +52,6 @@
 
     b-button(@click="createPaper") Create
 
-    div(
-      style="position: absolute; height: 50px; width: 50px; right: 0; bottom: 0;"
-      @dblclick="hydrateTable"
-    )
-
 
 </template>
 
@@ -104,17 +99,11 @@ export default {
       this.$emit('openClientModal')
     },
     async createPaper() {
-      this.$emit('generateReport', this.clients)
-      // const newPaper = await this.$http.post('/paper/createPaper', this.currentPaper) 
-      // console.log(newPaper)
-
-    },
-    hydrateTable() {
-      this.$emit('hydrateTable', this.clients)
+      this.$emit('generateReport')
     },
     async getLastDocumentNumberByType() {
       const lastNumber = await this.$http.get(`/paper/getLastNumberOfType/${this.currentPaper.type}`)
-      console.log(lastNumber)
+      this.$set(this.currentPaper, 'documentNumber', lastNumber.data.documentNumber)
     }
   },
   computed: {
@@ -123,7 +112,6 @@ export default {
     }
   },
   created() {
-    // this.getClients()
     this.getLastDocumentNumberByType()
   },
   watch: {

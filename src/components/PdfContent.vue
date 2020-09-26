@@ -123,12 +123,7 @@ export default {
       
       return results;
     }
-    // generatePdf() {
-    //   const doc = new jsPDF()
-    //   doc.text("Hello world!", 10, 10)
-    //   doc.addImage(this.$refs.imaaage, "JPEG", 10, 10, 100, 50)
-    //   doc.save("testaa.pdf")
-    // } 
+    
   }
 }
 </script>
