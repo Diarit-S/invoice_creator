@@ -70,11 +70,11 @@ export default {
       possibleTypes: [
         {
           key: "invoice",
-          value: 'facture'
+          value: 'Facture'
         },
         {
           key: "quote",
-          value: 'devis'
+          value: 'Devis'
         }
       ],
       isClientModalOpen: false,
@@ -99,7 +99,8 @@ export default {
       this.$emit('openClientModal')
     },
     async createPaper() {
-      this.$router.push({name: 'tableView'})
+      document.title = `${this.translatedCurrentPaperType} n°${this.currentPaper.documentNumber} ${this.selectedClient.fullName}`
+      this.$router.push({name: 'tableView'}).then(() => window.print())
     },
     async getLastDocumentNumberByType() {
       const lastNumber = await this.$http.get(`/paper/getLastNumberOfType/${this.currentPaper.type}`)
@@ -109,6 +110,9 @@ export default {
   computed: {
     selectedClient() {
       return this.clients.find(client => client._id === this.currentPaper.clientId)
+    },
+    translatedCurrentPaperType() {
+      return this.possibleTypes.find(type => type.key === this.currentPaper.type).value.toUpperCase()
     }
   },
   created() {

@@ -16,11 +16,12 @@
         v-bind="dragOptions"
       )
         transition-group(type="transition" name="flip-list")
-          custom-field.list-complete-item(
+          custom-field.flip-list-item(
             v-for="(field, index) in content.currentPaper.fields"
             :key="'field' + index"
             :field="field"
             @copy:field='copyField(field, index)'
+            @saveAsTemplate='saveAsTemplate(field.content)'
           )
             template(#drag)
               b-icon.drag-icon.drag(
@@ -29,7 +30,17 @@
               )
 
       .pdf-content__right__config
-        b-button.is-info(size="is-medium" icon-left="plus-circle-outline" @click="createNewField")
+        b-button.is-info(icon-left="plus-circle-outline" @click="createNewField")
+
+        b-dropdown(@change="createNewFieldWidhTemplate")
+          template(#trigger)
+            button.button.is-info Model
+          b-dropdown-item(
+            v-for="template in fieldTemplates"
+            aria-role="listitem"
+            :key="template._id"
+            :value="template.template"
+          ) {{ template.name }}
 
     b-modal(
       v-model="isClientModalOpen"
@@ -41,6 +52,18 @@
     )
       template(#default="props")
         client-modal(:newClient="newClient" @createClient="createClient(props)")
+
+    b-modal(
+      v-model="isFieldTemplateModalOpen"
+      has-modal-card
+      trap-focus
+      :destroy-on-hide="false"
+      aria-role="dialog"
+      aria-modal
+    )
+      template(#default="props")
+        field-template-modal(:newTemplate="newTemplate" @createTemplate="confirmTemplateCreation(props)")
+
 </template>
 
 <script>
@@ -50,6 +73,7 @@ import CustomField from "./CustomField";
 import LeftSide from "./LeftSide";
 
 import ClientModal from './ClientModal'
+import FieldTemplateModal from './FieldTemplateModal'
 
 import _ from 'lodash'
 
@@ -62,17 +86,22 @@ export default {
     CustomField,
     LeftSide,
     ClientModal,
-    Draggable
+    Draggable,
+    FieldTemplateModal
   },
   data() {
     return {
       isClientModalOpen: false,
+      isFieldTemplateModalOpen: false,
       newClient: {
         fullName: '',
         address: '',
         zipCodeAndCity: '',
         workAddress: "Identique à l'adresse client",
-      }
+      },
+      newTemplate: {},
+      fieldTemplates: [],
+      test: 'aaa'
     }
   },
   props: {
@@ -126,11 +155,28 @@ export default {
     },
     copyField(field, index) {
       this.content.currentPaper.fields.splice(index + 1, 0, _.cloneDeep(field))
+    },
+    async saveAsTemplate(template) {
+      this.newTemplate = {template}
+      this.isFieldTemplateModalOpen = true
+    },
+    async confirmTemplateCreation(props) {
+      const newTemplate = await this.$http.post('/fieldTemplate/createTemplate', this.newTemplate)
+      props.close()
+      console.log(newTemplate)
+    },
+    async getFieldTemplates() {
+      const templates = await this.$http.get('/fieldTemplate')
+      this.fieldTemplates = templates.data
+    },
+    createNewFieldWidhTemplate(content) {
+      this.content.currentPaper.fields.push({content, unit: 'm²'});
     }
   },
   created() {
     this.getClients()
     this.getLastDocumentNumberByType()
+    this.getFieldTemplates()
     //- this.getLastDocumentNumber
     //- Create a watch for document type and recall getLastDocumentNumber
   },
@@ -157,6 +203,9 @@ export default {
       display: flex;
       justify-content: flex-start;
       margin-top: 10px;
+      >* {
+        margin-right: 10px;
+      }
     }
   }
 
@@ -226,22 +275,22 @@ export default {
   opacity: 0.5;
 }
 
-// .list-complete-item {
-//   transition: all 1s;
-//   display: inline-block;
-// }
-// .list-complete-enter, .list-complete-leave-to
-// /* .list-complete-leave-active below version 2.1.8 */ {
-//   opacity: 0;
-//   transform: translateX(-30px);
-// }
-// .list-complete-leave-active {
-//   position: absolute;
-// }
-
-.flip-list-move {
-  transition: transform 0.5s;
+.flip-list-item {
+  transition: all 1s;
+  // display: inline-block;
 }
+.flip-list-enter, .flip-list-leave-to
+/* .flip-list-leave-active below version 2.1.8 */ {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+.flip-list-leave-active {
+  position: absolute;
+}
+
+// .flip-list-move {
+//   transition: transform 0.5s;
+// }
 
 .drag-icon {
   cursor: pointer;

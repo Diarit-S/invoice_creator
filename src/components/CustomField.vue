@@ -9,7 +9,13 @@
                 icon="content-copy" 
                 type="is-dark"
               )
+            div()
               slot(name="drag")
+            div(@click="saveAsFieldTemplate")
+              b-icon.save-icon(
+                icon="content-save-edit-outline" 
+                type="is-dark"
+              )
         editor(v-model="field.content" :init="tinyConfig")
 
       b-field(
@@ -97,6 +103,9 @@ export default {
     },
     copyField() {
       this.$emit('copy:field')
+    },
+    saveAsFieldTemplate() {
+      this.$emit('saveAsTemplate')
     }
   },
   watch: {
@@ -171,6 +180,15 @@ export default {
 .copy-icon {
   cursor: pointer;
   transition: transform 0.15s ease-in-out;
+  &:hover {
+    transform: translateY(-3px)
+  }
+}
+
+.save-icon {
+  cursor: pointer;
+  transition: transform 0.15s ease-in-out;
+  margin-left: 15px;
   &:hover {
     transform: translateY(-3px)
   }
