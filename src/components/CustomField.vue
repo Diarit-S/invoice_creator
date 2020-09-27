@@ -2,6 +2,14 @@
   div.custom-field
     div.custom-field__infos
       b-field.custom-field__infos__content
+        template(#label)
+          .content-field-label
+            div(@click="copyField")
+              b-icon.copy-icon(
+                icon="content-copy" 
+                type="is-dark"
+              )
+              slot(name="drag")
         editor(v-model="field.content" :init="tinyConfig")
 
       b-field(
@@ -87,6 +95,9 @@ export default {
     onInitialized(editor) {
       console.log(editor);
     },
+    copyField() {
+      this.$emit('copy:field')
+    }
   },
   watch: {
     "field.unitPrice": function(newValue) {
@@ -105,7 +116,6 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  margin-bottom: 20px;
 
   &__infos {
     display: flex;
@@ -140,5 +150,29 @@ export default {
     }
   }
 
+  .content-field-label {
+    display: flex;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+
+    * {
+      margin-right: 10px;
+    }
+  }
+
+  &:hover {
+    .content-field-label {
+      opacity: 1;
+    }
+  }
+}
+
+
+.copy-icon {
+  cursor: pointer;
+  transition: transform 0.15s ease-in-out;
+  &:hover {
+    transform: translateY(-3px)
+  }
 }
 </style>

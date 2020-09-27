@@ -7,15 +7,26 @@
       :amountsData="amountsData"
       :clients="content.clients"
       @openClientModal="openClientModal"
-      @generatePdf="generatePdf"
     )
 
     .pdf-content__right
-      custom-field(
-        v-for="(field, index) in content.currentPaper.fields"
-        :key="'field' + index"
-        :field="field"
+      draggable(
+        v-model="content.currentPaper.fields" 
+        handle=".drag"
+        v-bind="dragOptions"
       )
+        transition-group(type="transition" name="flip-list")
+          custom-field.list-complete-item(
+            v-for="(field, index) in content.currentPaper.fields"
+            :key="'field' + index"
+            :field="field"
+            @copy:field='copyField(field, index)'
+          )
+            template(#drag)
+              b-icon.drag-icon.drag(
+                icon="drag-horizontal" 
+                type="is-dark"
+              )
 
       .pdf-content__right__config
         b-button.is-info(size="is-medium" icon-left="plus-circle-outline" @click="createNewField")
@@ -40,13 +51,18 @@ import LeftSide from "./LeftSide";
 
 import ClientModal from './ClientModal'
 
+import _ from 'lodash'
+
+import Draggable from 'vuedraggable'
+
 
 export default {
   name: "CreatorForm",
   components: {
     CustomField,
     LeftSide,
-    ClientModal
+    ClientModal,
+    Draggable
   },
   data() {
     return {
@@ -64,28 +80,19 @@ export default {
       type: Object,
       required: true,
     },
+    amountsData: {
+      type: Object,
+      required: true
+    }
   },
   computed: {
-    totalWithoutTaxes() {
-      return parseFloat(this.content.currentPaper.fields.reduce((acc, currentField) => {
-        if (currentField.amount) {
-          acc += currentField.amount
-        }
-        return acc
-      }, 0).toFixed(2))
-    },
-    taxeAmount() {
-      return parseFloat((this.totalWithoutTaxes * (this.content.currentPaper.TVAPercent / 100)).toFixed(2))
-    },
-    totalAmount() {
-      return parseFloat((this.totalWithoutTaxes + this.taxeAmount).toFixed(2))
-    },
-    amountsData() {
+    dragOptions() {
       return {
-        totalWithoutTaxes: this.totalWithoutTaxes,
-        taxeAmount: this.taxeAmount,
-        totalAmount: this.totalAmount
-      }
+        animation: 0,
+        group: "description",
+        disabled: false,
+        ghostClass: "ghost"
+      };
     }
   },
   methods: {
@@ -117,8 +124,8 @@ export default {
     openClientModal() {
       this.isClientModalOpen = true
     },
-    generatePdf() {
-      this.$emit('generatePdf')
+    copyField(field, index) {
+      this.content.currentPaper.fields.splice(index + 1, 0, _.cloneDeep(field))
     }
   },
   created() {
@@ -143,11 +150,12 @@ export default {
   &__right {
     padding-left: 50px;
     min-width: 70%;
-    max-width: 70%
+    max-width: 70%;
+    transition: all 1s ease-in-out;
 
     &__config {
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-start;
       margin-top: 10px;
     }
   }
@@ -212,6 +220,35 @@ export default {
   padding: 20px;
   max-width: 500px;
   margin: auto;
+}
+
+.ghost {
+  opacity: 0.5;
+}
+
+// .list-complete-item {
+//   transition: all 1s;
+//   display: inline-block;
+// }
+// .list-complete-enter, .list-complete-leave-to
+// /* .list-complete-leave-active below version 2.1.8 */ {
+//   opacity: 0;
+//   transform: translateX(-30px);
+// }
+// .list-complete-leave-active {
+//   position: absolute;
+// }
+
+.flip-list-move {
+  transition: transform 0.5s;
+}
+
+.drag-icon {
+  cursor: pointer;
+  transition: transform 0.15s ease-in-out;
+  &:hover {
+    transform: translateY(-3px)
+  }
 }
 
 </style>

@@ -23,34 +23,34 @@
         ) {{ client.fullName }}
       p(v-if="selectedClient") {{ selectedClient.address }}
 
-    b-field( label="Date" label-position="on-border")
+    b-field( label="Date")
       b-datepicker(
         v-model="currentPaper.creationDate"
         placeholder="Selectionner une date"
         icon="calendar-today"
       )
-      
-    b-field.price-field( label="Total HT" label-position="on-border")
-      b-tag(type="is-info is-light" size="is-large") {{ amountsData.totalWithoutTaxes }} €
+    div.price-container
+      b-field.price-field( label="Total HT")
+        b-tag(type="is-info is-light" size="is-large") {{ amountsData.totalWithoutTaxes }} €
 
 
-    b-field.price-field(label="TVA" label-position="on-border")
-      b-tag(type="is-info is-light" size="is-large") {{ amountsData.taxeAmount }} €
-      p.control
-        b-dropdown(v-model="currentPaper.TVAPercent")
-          template(#trigger)
-            button(class="button is-info") {{ currentPaper.TVAPercent }} %
-          b-dropdown-item(
-            v-for="percent in possibleTvaPercents"
-            aria-role="listitem"
-            :key="percent"
-            :value="percent"
-          ) {{ percent }} %
+      b-field.price-field(label="TVA")
+        p.control
+          b-dropdown(v-model="currentPaper.TVAPercent")
+            template(#trigger)
+              button(class="button is-info") {{ currentPaper.TVAPercent }} %
+            b-dropdown-item(
+              v-for="percent in possibleTvaPercents"
+              aria-role="listitem"
+              :key="percent"
+              :value="percent"
+            ) {{ percent }} %
+        b-tag(type="is-info is-light" size="is-large") {{ amountsData.taxeAmount }} €
 
-    b-field.price-field(label="Total TTC" label-position="on-border")
-      b-tag(type="is-warning is-light" size="is-large") {{ amountsData.totalAmount }} €
+      b-field.price-field(label="Total TTC")
+        b-tag(type="is-warning is-light" size="is-large") {{ amountsData.totalAmount }} €
 
-    b-button(@click="createPaper") Create
+    b-button.is-success.pdf-btn(@click="createPaper" ) Créer PDF
 
 
 </template>
@@ -99,11 +99,11 @@ export default {
       this.$emit('openClientModal')
     },
     async createPaper() {
-      this.$emit('generatePdf')
+      this.$router.push({name: 'tableView'})
     },
     async getLastDocumentNumberByType() {
       const lastNumber = await this.$http.get(`/paper/getLastNumberOfType/${this.currentPaper.type}`)
-      this.$set(this.currentPaper, 'documentNumber', lastNumber.data.documentNumber)
+      this.$set(this.currentPaper, 'documentNumber', lastNumber.data.documentNumber + 1)
     }
   },
   computed: {
@@ -136,7 +136,7 @@ export default {
 
   .field {
     max-width: 150px;
-    margin: 30px 0;
+    margin-bottom: 20px 0;
   }
 }
 
@@ -163,8 +163,29 @@ export default {
   }
 }
 
+.price-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
 .price-field {
-  margin: 30px 0;
+  margin: 10px 0 !important;
+
+  &::v-deep {
+    .label {
+      text-align: right;
+    }
+  }
+
+  &:nth-of-type(2) {
+    transform: translateX(-20px);
+  }
+
+  .tag {
+    min-width: 100px;
+    justify-content: flex-end;
+  }
 }
 
 .client-field-label {
@@ -185,10 +206,8 @@ export default {
   margin: auto;
 }
 
-.save-button {
-  position: fixed; 
-  bottom: 0px; 
+.pdf-btn {
   left: 50%;
-  border-radius: 6px 6px 0 0;
+  transform: translate(-50%, 100%);
 }
 </style>

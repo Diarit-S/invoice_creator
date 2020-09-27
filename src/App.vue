@@ -1,6 +1,9 @@
 <template>
   <div id="app">
-    <router-view></router-view>
+    <router-view
+      :content="content"
+      :amountsData="amountsData"
+    ></router-view>
   </div>
 </template>
 
@@ -29,32 +32,6 @@ export default {
       },
     }
   },
-  // components: {
-  //   CreatorForm
-  // },
-  methods: {
-    generatePdf() {
-      // console.log(this.content)
-      // const doc = new jsPDF()
-      // doc.text("Hello world!", 10, 10)
-      // doc.addImage(this.$refs.test, "JPEG", 10, 10, 100, 50)
-      // doc.autoTable({
-      //   head: [['<p>Name</p>', 'Email', 'Country']],
-      //   body: [
-      //     ['David', 'david@example.com', 'Sweden'],
-      //     ['Castille', 'castille@example.com', 'Spain']
-      //   ],
-      // })
-      // doc.save("testaa.pdf")
-      // doc.html(document.body, {
-      //   callback: function (doc) {
-      //     doc.save();
-      //   },
-      //   x: 10,
-      //   y: 10
-      // })
-    }
-  },
   computed: {
     currentClient() {
       return this.content.clients.find(client => {
@@ -63,18 +40,37 @@ export default {
     },
     tableFields() {
       return this.content.currentPaper.fields
+    },
+    totalWithoutTaxes() {
+      return parseFloat(this.content.currentPaper.fields.reduce((acc, currentField) => {
+        if (currentField.amount) {
+          acc += currentField.amount
+        }
+        return acc
+      }, 0).toFixed(2))
+    },
+    taxeAmount() {
+      return parseFloat((this.totalWithoutTaxes * (this.content.currentPaper.TVAPercent / 100)).toFixed(2))
+    },
+    totalAmount() {
+      return parseFloat((this.totalWithoutTaxes + this.taxeAmount).toFixed(2))
+    },
+    amountsData() {
+      return {
+        totalWithoutTaxes: this.totalWithoutTaxes,
+        taxeAmount: this.taxeAmount,
+        totalAmount: this.totalAmount
+      }
     }
   }
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  margin-top: 10px;
-  padding: 20px;
 }
 </style>

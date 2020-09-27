@@ -8,6 +8,6 @@ Vue.use(VueRouter)
 export default new VueRouter({
   routes: [
     { path: '/', component: () => import('./pages/creator.vue')},
-    { path: '/tableView', component: () => import('./pages/tableView.vue') }
+    {name: 'tableView', path: '/tableView', component: () => import('./pages/tableView.vue') }
   ]
 })
