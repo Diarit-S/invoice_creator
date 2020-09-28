@@ -21,18 +21,27 @@
             :key="'field' + index"
             :field="field"
             @copy:field='copyField(field, index)'
-            @saveAsTemplate='saveAsTemplate(field.content)'
+            @delete:field='deleteField(field, index)'
           )
             template(#drag)
               b-icon.drag-icon.drag(
                 icon="drag-horizontal" 
                 type="is-dark"
               )
+            template(#templateBtn)
+              div(@click="saveAsTemplate(field.content)" v-if="!isFieldAlreadyTemplate(field)")
+                b-icon.save-icon(
+                  icon="content-save-edit-outline" 
+                  type="is-dark"
+                )
 
       .pdf-content__right__config
         b-button.is-info(icon-left="plus-circle-outline" @click="createNewField")
 
-        b-dropdown(@change="createNewFieldWidhTemplate")
+        b-dropdown(
+          aria-role="list"
+          @change="createNewFieldWidhTemplate"
+        )
           template(#trigger)
             button.button.is-info Model
           b-dropdown-item(
@@ -156,6 +165,9 @@ export default {
     copyField(field, index) {
       this.content.currentPaper.fields.splice(index + 1, 0, _.cloneDeep(field))
     },
+    deleteField(field, index) {
+      this.content.currentPaper.fields.splice(index, 1)
+    },
     async saveAsTemplate(template) {
       this.newTemplate = {template}
       this.isFieldTemplateModalOpen = true
@@ -163,7 +175,7 @@ export default {
     async confirmTemplateCreation(props) {
       const newTemplate = await this.$http.post('/fieldTemplate/createTemplate', this.newTemplate)
       props.close()
-      console.log(newTemplate)
+      this.fieldTemplates.push(newTemplate.data)
     },
     async getFieldTemplates() {
       const templates = await this.$http.get('/fieldTemplate')
@@ -171,6 +183,9 @@ export default {
     },
     createNewFieldWidhTemplate(content) {
       this.content.currentPaper.fields.push({content, unit: 'm²'});
+    },
+    isFieldAlreadyTemplate(field) {
+      return this.fieldTemplates.some(template => template.template === field.content) || !field.content
     }
   },
   created() {
@@ -300,4 +315,12 @@ export default {
   }
 }
 
+.save-icon {
+  cursor: pointer;
+  transition: transform 0.15s ease-in-out;
+  margin-left: 15px;
+  &:hover {
+    transform: translateY(-3px)
+  }
+}
 </style>

@@ -11,10 +11,11 @@
               )
             div()
               slot(name="drag")
-            div(@click="saveAsFieldTemplate")
-              b-icon.save-icon(
-                icon="content-save-edit-outline" 
-                type="is-dark"
+            slot(name="templateBtn")
+            div.delete-icon-container(@click="deleteField")
+              b-icon.delete-icon(
+                icon="close-circle-outline" 
+                type="is-danger"
               )
         editor(v-model="field.content" :init="tinyConfig")
 
@@ -106,6 +107,9 @@ export default {
     },
     saveAsFieldTemplate() {
       this.$emit('saveAsTemplate')
+    },
+    deleteField() {
+      this.$emit('delete:field')
     }
   },
   watch: {
@@ -178,6 +182,20 @@ export default {
 
 
 .copy-icon {
+  cursor: pointer;
+  transition: transform 0.15s ease-in-out;
+  &:hover {
+    transform: translateY(-3px)
+  }
+}
+
+.delete-icon-container {
+  margin-left: auto;
+  margin-right: 0 !important;
+}
+
+.delete-icon {
+  margin: 0;
   cursor: pointer;
   transition: transform 0.15s ease-in-out;
   &:hover {
