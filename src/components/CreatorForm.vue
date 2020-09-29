@@ -11,21 +11,26 @@
 
     .pdf-content__right
       draggable(
-        v-model="content.currentPaper.fields" 
+        class="list-group"
+        tag="div"
         handle=".drag"
+        v-model="content.currentPaper.fields"
         v-bind="dragOptions"
+        @start="drag = true"
+        @end="drag = false"
       )
-        transition-group(type="transition" name="flip-list")
-          custom-field.flip-list-item(
+        transition-group(type="transition" :name="!drag ? 'flip-list' : null")
+          custom-field.list-group-item(
             v-for="(field, index) in content.currentPaper.fields"
             :key="'field' + index"
             :field="field"
             @copy:field='copyField(field, index)'
             @delete:field='deleteField(field, index)'
+            :drag="drag"
           )
             template(#drag)
               b-icon.drag-icon.drag(
-                icon="drag-horizontal" 
+                icon="drag-horizontal"
                 type="is-dark"
               )
             template(#templateBtn)
@@ -110,7 +115,8 @@ export default {
       },
       newTemplate: {},
       fieldTemplates: [],
-      test: 'aaa'
+      test: 'aaa',
+      drag: false
     }
   },
   props: {
@@ -126,11 +132,11 @@ export default {
   computed: {
     dragOptions() {
       return {
-        animation: 0,
+        animation: 200,
         group: "description",
         disabled: false,
         ghostClass: "ghost"
-      };
+      }
     }
   },
   methods: {
@@ -166,6 +172,7 @@ export default {
       this.content.currentPaper.fields.splice(index + 1, 0, _.cloneDeep(field))
     },
     deleteField(field, index) {
+      console.log(index)
       this.content.currentPaper.fields.splice(index, 1)
     },
     async saveAsTemplate(template) {
@@ -290,25 +297,25 @@ export default {
   opacity: 0.5;
 }
 
-.flip-list-item {
-  transition: all 1s;
-  // display: inline-block;
-}
-.flip-list-enter, .flip-list-leave-to
-/* .flip-list-leave-active below version 2.1.8 */ {
-  opacity: 0;
-  transform: translateX(-30px);
-}
-.flip-list-leave-active {
-  position: absolute;
-}
-
-// .flip-list-move {
-//   transition: transform 0.5s;
+// .flip-list-item {
+//   transition: all 1s;
+//   // display: inline-block;
+// }
+// .flip-list-enter, .flip-list-leave-to
+// /* .flip-list-leave-active below version 2.1.8 */ {
+//   opacity: 0;
+//   transform: translateX(-30px);
+// }
+// .flip-list-leave-active {
+//   position: absolute;
 // }
 
+.flip-list-move {
+  transition: transform 0.5s;
+}
+
 .drag-icon {
-  cursor: pointer;
+  cursor: grab;
   transition: transform 0.15s ease-in-out;
   &:hover {
     transform: translateY(-3px)

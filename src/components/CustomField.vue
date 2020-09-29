@@ -17,12 +17,14 @@
                 icon="close-circle-outline" 
                 type="is-danger"
               )
-        editor(v-model="field.content" :init="tinyConfig")
+        editor(
+          v-model="field.content"
+          :init="tinyConfig"
+        )
 
-      b-field(
+      b-field.custom-field__infos__unit(
         label="Unité"
         label-position="on-border"
-        class="custom-field__infos__unit"
         :grouped="false"
       )
         b-numberinput(:controls="false" v-model="field.unitValue" step="0.01")
@@ -37,10 +39,9 @@
               :value="unit"
             ) {{ unit }}
 
-      b-field(
+      b-field.custom-field__infos__ht-price(
         label="Prix unitaire"
         label-position="on-border"
-        class="custom-field__infos__ht-price"
       )
         b-numberinput(:controls="false" v-model="field.unitPrice" step="0.01")
 
@@ -69,8 +70,12 @@ export default {
   props: {
     field: {
       type: Object,
-      required: true,
+      required: true
     },
+    drag: {
+      type: Boolean,
+      default: false
+    }
   },
   computed: {
     tinyConfig() {
@@ -210,5 +215,9 @@ export default {
   &:hover {
     transform: translateY(-3px)
   }
+}
+
+.no-pointer {
+  pointer-events: none;
 }
 </style>
