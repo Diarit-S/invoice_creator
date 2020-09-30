@@ -19,7 +19,7 @@
     b-table(
       :data="content.currentPaper.fields"
       bordered
-      style="max-width: 772px; margin-top: 10px"
+      style="max-width: 795px; margin-top: 10px"
     )
       b-table-column(field="content" label="Description" width="397" v-slot="props" header-class="table-head")
         div( v-html="props.row.content")
@@ -136,7 +136,7 @@ export default {
 .pdf-content {
   margin: 10px;
   height: 500px;
-  width: 772px;
+  width: 795px;
   // border: 1px solid black;
 
     &__head {
