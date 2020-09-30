@@ -5,7 +5,7 @@
         p.modal-card-title Enregistrer un nouveau model
         button.delete(
           type="button"
-          @click="$emit('close')"
+          @click="$emit('closeTemplateModal')"
         )
       section.modal-card-body
         b-field(label="Nom du model" label-position="on-border" autocomplete="off")

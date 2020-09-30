@@ -76,7 +76,11 @@
       aria-modal
     )
       template(#default="props")
-        field-template-modal(:newTemplate="newTemplate" @createTemplate="confirmTemplateCreation(props)")
+        field-template-modal(
+          :newTemplate="newTemplate" 
+          @createTemplate="confirmTemplateCreation(props)"
+          @closeTemplateModal="closeTemplateModal(props)"
+        )
 
 </template>
 
@@ -183,6 +187,9 @@ export default {
       const newTemplate = await this.$http.post('/fieldTemplate/createTemplate', this.newTemplate)
       props.close()
       this.fieldTemplates.push(newTemplate.data)
+    },
+    closeTemplateModal(props) {
+      props.close()
     },
     async getFieldTemplates() {
       const templates = await this.$http.get('/fieldTemplate')
