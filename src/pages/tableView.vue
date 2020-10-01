@@ -66,7 +66,7 @@ export default {
       documentTypes: {
         quote: 'Devis',
         invoice: 'Facture'
-      }
+      },
     }
   },
   filters: {priceFormat},
@@ -97,9 +97,9 @@ export default {
     // },
     amountFields() {
       return [
-        {key: 'htPrice', value: this.amountsData.totalWithoutTaxes},
-        {key: 'taxeAmount', value: this.amountsData.taxeAmount},
-        {key: 'totalAmount', value: this.amountsData.totalAmount}
+        {key: 'Prix HT', value: this.amountsData.totalWithoutTaxes},
+        {key: `TVA ${this.content.currentPaper.TVAPercent} %`, value: this.amountsData.taxeAmount},
+        {key: 'Prix TTC', value: this.amountsData.totalAmount}
       ]
     }
   },
