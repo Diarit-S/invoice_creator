@@ -1,6 +1,8 @@
 <template lang="pug">
   div.custom-field
     div.custom-field__infos
+      div.drag-icon
+        slot(name="drag")
       b-field.custom-field__infos__content
         template(#label)
           .content-field-label
@@ -9,8 +11,6 @@
                 icon="content-copy" 
                 type="is-dark"
               )
-            div()
-              slot(name="drag")
             slot(name="templateBtn")
             div.delete-icon-container(@click="deleteField")
               b-icon.delete-icon(
@@ -178,8 +178,19 @@ export default {
     }
   }
 
+  .drag-icon {
+    align-self: flex-start;
+    margin-top: 30px;
+    margin-right: 5px;
+    opacity: 0;
+  }
+
   &:hover {
     .content-field-label {
+      opacity: 1;
+      transition: opacity 0.2s ease-in-out;
+    }
+    .drag-icon {
       opacity: 1;
     }
   }
@@ -220,4 +231,5 @@ export default {
 .no-pointer {
   pointer-events: none;
 }
+
 </style>

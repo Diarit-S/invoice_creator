@@ -4,6 +4,8 @@
       b-select(placeholder="Type de document" v-model="currentPaper.type")
         option(v-for="type in possibleTypes" :value="type.key" :key="type.key")
           | {{ type.value }}
+      p.control
+        span.button.is-static n° {{ currentPaper.documentNumber }}
 
     b-field.client
       template(#label)
@@ -99,6 +101,7 @@ export default {
       this.$emit('openClientModal')
     },
     async createPaper() {
+      await this.$http.post('/paper/createPaper', this.currentPaper) 
       document.title = `${this.translatedCurrentPaperType} n°${this.currentPaper.documentNumber} ${this.selectedClient.fullName}`
       this.$router.push({name: 'tableView'}).then(() => window.print())
     },
@@ -132,11 +135,12 @@ export default {
   position: fixed;
   min-width: 400px;
   max-width: 400px;
-  box-shadow: 0 0 20px rgba($color: gray, $alpha: 0.4);
+  box-shadow: 0 0 20px 5px rgba($color: gray, $alpha: 0.2);
   padding: 20px;
-  border-radius: 10px;
-  min-height: 80vh;
-
+  border-radius: 0 20px 20px 0;
+  height: 100vh;
+  top: 0;
+  left: 0;
 
   .field {
     max-width: 150px;

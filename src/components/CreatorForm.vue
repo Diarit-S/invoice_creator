@@ -156,10 +156,6 @@ export default {
       props.close()
       this.content.clients.push(newClient.data)
     },
-    async createPaper() {
-      const newPaper = await this.$http.post('/paper/createPaper', this.content.currentPaper) 
-      console.log(newPaper)
-    },
     async getLastDocumentNumber() {
       const lastDocumentNumber = await this.$http.get(`/paper/getLastNumber/${this.content.currentPaper.type}`)
       //- .data ....
@@ -232,27 +228,27 @@ export default {
       display: flex;
       justify-content: flex-start;
       margin-top: 10px;
+      margin-left: 35px;
       >* {
         margin-right: 10px;
       }
     }
   }
 
-  &__left {
-    position: fixed;
-    min-width: 400px;
-    max-width: 400px;
-    box-shadow: 0 0 20px rgba($color: gray, $alpha: 0.4);
-    padding: 20px;
-    border-radius: 10px;
-    min-height: 80vh;
+  // &__left {
+  //   position: fixed;
+  //   min-width: 400px;
+  //   max-width: 400px;
+  //   box-shadow: 0 0 20px rgba($color: gray, $alpha: 0.4);
+  //   padding: 20px;
+  //   min-height: 80vh;
 
 
-   .field {
-     max-width: 150px;
-     margin: 30px 0;
-   }
-  }
+  //  .field {
+  //    max-width: 150px;
+  //    margin: 30px 0;
+  //  }
+  // }
 }
 
 .document-type {
@@ -332,7 +328,6 @@ export default {
 .save-icon {
   cursor: pointer;
   transition: transform 0.15s ease-in-out;
-  margin-left: 15px;
   &:hover {
     transform: translateY(-3px)
   }
