@@ -25,7 +25,7 @@ export default {
           ],
           TVAPercent: 10,
           documentNumber: 0,
-          clientId: '5f5e301e972a0900171c8fd2',
+          clientId: '',
           creationDate: new Date()
         },
         clients: []
@@ -62,6 +62,15 @@ export default {
         totalAmount: this.totalAmount
       }
     }
+  },
+  methods: {
+    async getClients() {
+      const clients = await this.$http.get('/client/')
+      this.content.clients = clients.data
+    }
+  },
+  created() {
+    this.getClients()
   }
 }
 </script>

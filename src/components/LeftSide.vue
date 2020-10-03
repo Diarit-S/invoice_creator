@@ -119,7 +119,9 @@ export default {
     }
   },
   created() {
-    this.getLastDocumentNumberByType()
+    if (!this.currentPaper.documentNumber) {
+      this.getLastDocumentNumberByType()
+    }
   },
   watch: {
     'currentPaper.type': function() {

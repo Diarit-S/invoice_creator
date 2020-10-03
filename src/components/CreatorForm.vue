@@ -147,10 +147,6 @@ export default {
     createNewField() {
       this.content.currentPaper.fields.push({unit: 'm²'});
     },
-    async getClients() {
-      const clients = await this.$http.get('/client/')
-      this.content.clients = clients.data
-    },
     async createClient(props) {
       const newClient = await this.$http.post('/client/createClient', this.newClient) 
       props.close()
@@ -199,7 +195,6 @@ export default {
     }
   },
   created() {
-    this.getClients()
     this.getLastDocumentNumberByType()
     this.getFieldTemplates()
     //- this.getLastDocumentNumber
