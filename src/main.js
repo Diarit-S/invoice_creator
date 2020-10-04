@@ -6,6 +6,10 @@ import router from './router'
 import axios from "axios"
 import axiosSetup from "@/utils/axios-setup"
 
+import moment from 'moment'
+
+moment.locale('fr')
+
 import 'buefy/dist/buefy.css'
 import { 
   Input, 
