@@ -86,6 +86,11 @@ export default {
       required: true
     }
   },
+  mounted() {
+    setTimeout(() => {
+      window.print()
+    }, 500);
+  },
   computed: {
     creationDate() {
       return moment(this.content.currentPaper.creationDate).format('L')

@@ -104,12 +104,12 @@ export default {
     async createPaper() {
       await this.$http.post('/paper/createPaper', this.currentPaper) 
       document.title = `${this.translatedCurrentPaperType} n°${this.currentPaper.documentNumber} ${this.selectedClient.fullName}`
-      this.$router.push({name: 'tableView'}).then(() => window.print())
+      this.$router.push({name: 'tableView'})
     },
     async updatePaper() {
       await this.$http.post('/paper/updatePaper', this.currentPaper)
       document.title = `${this.translatedCurrentPaperType} n°${this.currentPaper.documentNumber} ${this.selectedClient.fullName}`
-      this.$router.push({name: 'tableView'}).then(() => window.print())
+      this.$router.push({name: 'tableView'})
     },
     async getLastDocumentNumberByType() {
       const lastNumber = await this.$http.get(`/paper/getLastNumberOfType/${this.currentPaper.type}`)
