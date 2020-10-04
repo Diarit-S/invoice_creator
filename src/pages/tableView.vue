@@ -2,7 +2,8 @@
   div.pdf-content
     div.pdf-content__head
       img(
-        src="@/assets/drita_infos.jpg"
+        src="@/assets/image010.png"
+        style="height: 150px"
       )
       div.pdf-content__head__right-card
         .document-type 
@@ -39,11 +40,16 @@
 
     //- .html2pdf__page-break
 
-    section
+    section.under-table-section
+      img(
+        src="@/assets/cachet.jpg"
+        style="height: 100px; margin: 15px;"
+      )
+
       b-table.price-table(
         :data="this.amountFields"
         bordered
-        style="max-width: 300px; margin-left: auto"
+        style="max-width: 300px;"
       )
         b-table-column(field="key" width="100" v-slot="props" header-class="table-head")
           | {{ props.row.key }}
@@ -186,5 +192,9 @@ export default {
   }
 }
 
+.under-table-section {
+  display: flex;
+  justify-content: flex-end;
+}
 
 </style>
