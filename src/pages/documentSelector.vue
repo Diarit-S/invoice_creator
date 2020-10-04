@@ -77,7 +77,7 @@ export default {
     tableData() {
       return this.documents.map(document => {
         return {
-          clientId: document.clientId,
+          _id: document._id,
           client: this.clientNameFromClientId(document.clientId),
           creationDate: this.creationDate(document.creationDate),
           documentNumber: document.documentNumber
