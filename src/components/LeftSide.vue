@@ -52,7 +52,8 @@
       b-field.price-field(label="Total TTC")
         b-tag(type="is-warning is-light" size="is-large") {{ amountsData.totalAmount }} €
 
-    b-button.is-success.pdf-btn(@click="createPaper" ) Créer PDF
+    b-button.is-success.pdf-btn(v-if="isNewPaper" @click="createPaper" ) Créer
+    b-button.is-success.pdf-btn(v-else @click="updatePaper" )  Mettre à jour
 
 
 </template>
@@ -105,12 +106,20 @@ export default {
       document.title = `${this.translatedCurrentPaperType} n°${this.currentPaper.documentNumber} ${this.selectedClient.fullName}`
       this.$router.push({name: 'tableView'}).then(() => window.print())
     },
+    async updatePaper() {
+      await this.$http.post('/paper/updatePaper', this.currentPaper)
+      document.title = `${this.translatedCurrentPaperType} n°${this.currentPaper.documentNumber} ${this.selectedClient.fullName}`
+      this.$router.push({name: 'tableView'}).then(() => window.print())
+    },
     async getLastDocumentNumberByType() {
       const lastNumber = await this.$http.get(`/paper/getLastNumberOfType/${this.currentPaper.type}`)
       this.$set(this.currentPaper, 'documentNumber', lastNumber.data.documentNumber + 1)
     }
   },
   computed: {
+    isNewPaper() {
+      return !this.currentPaper._id
+    },
     selectedClient() {
       return this.clients.find(client => client._id === this.currentPaper.clientId)
     },
