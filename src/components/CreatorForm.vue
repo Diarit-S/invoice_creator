@@ -65,7 +65,7 @@
       aria-modal
     )
       template(#default="props")
-        client-modal(:newClient="newClient" @createClient="createClient(props)")
+        client-modal(:newClient="newClient" @createClient="createClient(props)" @close="closeClientModal(props)" )
 
     b-modal(
       v-model="isFieldTemplateModalOpen"
@@ -151,6 +151,9 @@ export default {
       const newClient = await this.$http.post('/client/createClient', this.newClient) 
       props.close()
       this.content.clients.push(newClient.data)
+    },
+    closeClientModal(props) {
+      props.close()
     },
     async getLastDocumentNumber() {
       const lastDocumentNumber = await this.$http.get(`/paper/getLastNumber/${this.content.currentPaper.type}`)

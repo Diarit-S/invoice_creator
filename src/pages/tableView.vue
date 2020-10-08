@@ -16,13 +16,15 @@
           span {{ currentClient.fullName }}
           span {{ currentClient.address }}
           span {{ currentClient.zipCodeAndCity }}
+        .document-work-address(v-if="currentClient.workAddress !== defaultWorkAddress")
+          span Adresse chantier : {{ currentClient.workAddress }}
     //- section(v-for="section in sectionsDevidedFields" class="pdf-item")
     b-table(
       :data="content.currentPaper.fields"
       bordered
       style="max-width: 795px; margin-top: 10px"
     )
-      b-table-column(field="content" label="Description" width="397" v-slot="props" header-class="table-head")
+      b-table-column(field="content" label="Description" width="420" v-slot="props" header-class="table-head")
         div( v-html="props.row.content")
 
       b-table-column(field="unitValue" label="Unité" width="125" v-slot="props" header-class="table-head" cell-class="right-bottom")
@@ -49,12 +51,13 @@
       b-table.price-table(
         :data="this.amountFields"
         bordered
-        style="max-width: 300px;"
+        style="width: 250px;"
+        :row-class="(row, index) => index === 2 && 'last-line'"
       )
-        b-table-column(field="key" width="100" v-slot="props" header-class="table-head")
+        b-table-column(field="key" width="125" v-slot="props" header-class="table-head" style="max-width: 125px")
           | {{ props.row.key }}
 
-        b-table-column(field="value" width="200" v-slot="props" header-class="table-head" cell-class="right-bottom")
+        b-table-column(field="value" width="125" v-slot="props" header-class="table-head" cell-class="right-bottom" style="width: 125px")
           | {{ props.row.value | priceFormat }}
 </template>
 
@@ -73,6 +76,7 @@ export default {
         quote: 'Devis',
         invoice: 'Facture'
       },
+      defaultWorkAddress: "Identique à l'adresse client"
     }
   },
   filters: {priceFormat},
@@ -183,6 +187,10 @@ export default {
         justify-content: space-between;
       }
 
+      .document-work-address {
+        font-size: 12px;
+      }
+
       >* {
         position: relative;
         display: block;
@@ -201,5 +209,25 @@ export default {
   display: flex;
   justify-content: flex-end;
 }
+
+.price-table {
+  &::v-deep {
+    td {
+      width: 125px;
+      min-width: 125px;
+      max-width: 125px;
+    }
+    .last-line {
+      background-color: #363630;
+      color: white;
+      font-weight: bold;
+
+      td {
+        border-width: 0;
+      }
+    }
+  }
+}
+
 
 </style>
