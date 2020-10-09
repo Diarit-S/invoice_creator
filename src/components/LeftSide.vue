@@ -7,6 +7,10 @@
       p.control
         span.button.is-static n° {{ currentPaper.documentNumber }}
 
+    template(v-if="currentPaper.type === 'invoice'")
+      b-tag(type="is-info" v-if="this.currentPaper.linkedQuotePaperId") {{ currentPaperLinkedQuotePaper.documentNumber }}
+      b-button.is-info(v-else @click="isQuoteSelectionModalOpen = true") Lier cette facture à un devis
+
     b-field.client
       template(#label)
         .client-field-label
@@ -55,17 +59,33 @@
     b-button.is-success.pdf-btn(v-if="isNewPaper" @click="createPaper" ) Créer
     b-button.is-success.pdf-btn(v-else @click="updatePaper" )  Mettre à jour
 
+    b-modal(
+      v-model="isQuoteSelectionModalOpen"
+      has-modal-card
+      trap-focus
+      :destroy-on-hide="false"
+      aria-role="dialog"
+      aria-modal
+    )
+      template(#default="props")
+        quote-selection-modal(
+          @selectQuote="linkCurrentPaperToQuote(props)" 
+          @close="closeQuoteSelectionModal(props)" 
+        )
+
 
 </template>
 
 <script>
 
 import CustomField from "./CustomField";
+import QuoteSelectionModal from "@/components/QuoteSelectionModal"
 
 export default {
   name: "LeftSide",
   components: {
     CustomField,
+    QuoteSelectionModal
   },
   data() {
     return {
@@ -81,6 +101,8 @@ export default {
         }
       ],
       isClientModalOpen: false,
+      isQuoteSelectionModalOpen: false,
+      currentPaperLinkedQuotePaper: {}
     };
   },
   props: {
@@ -114,6 +136,14 @@ export default {
     async getLastDocumentNumberByType() {
       const lastNumber = await this.$http.get(`/paper/getLastNumberOfType/${this.currentPaper.type}`)
       this.$set(this.currentPaper, 'documentNumber', lastNumber.data.documentNumber + 1)
+    },
+    linkCurrentPaperToQuote(quote, props) {
+      this.currentPaperLinkedQuotePaper = quote
+      this.currentPaper.linkedQuotePaperId = quote._id
+      props.close()
+    },
+    closeQuoteSelectionModal(props) {
+      props.close()
     }
   },
   computed: {

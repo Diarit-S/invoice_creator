@@ -65,7 +65,11 @@
       aria-modal
     )
       template(#default="props")
-        client-modal(:newClient="newClient" @createClient="createClient(props)" @close="closeClientModal(props)" )
+        client-modal(
+          :newClient="newClient"
+          @createClient="createClient(props)" 
+          @close="closeClientModal(props)" 
+        )
 
     b-modal(
       v-model="isFieldTemplateModalOpen"
