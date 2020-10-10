@@ -6,7 +6,9 @@
       :currentPaper="content.currentPaper"
       :amountsData="amountsData"
       :clients="content.clients"
+      :currentPaperLinkedQuotePaper="currentPaperLinkedQuotePaper"
       @openClientModal="openClientModal"
+      @openQuoteSelectionModal="isQuoteSelectionModalOpen = true"
     )
 
     .pdf-content__right
@@ -86,6 +88,20 @@
           @closeTemplateModal="closeTemplateModal(props)"
         )
 
+    b-modal(
+      v-model="isQuoteSelectionModalOpen"
+      has-modal-card
+      trap-focus
+      :destroy-on-hide="false"
+      aria-role="dialog"
+      aria-modal
+    )
+      template(#default="props")
+        quote-selection-modal(
+          @selectQuote="linkCurrentPaperToQuote(props, $event)" 
+          @close="closeQuoteSelectionModal(props)" 
+        )
+
 </template>
 
 <script>
@@ -101,6 +117,9 @@ import _ from 'lodash'
 
 import Draggable from 'vuedraggable'
 
+import QuoteSelectionModal from "@/components/QuoteSelectionModal"
+
+
 
 export default {
   name: "CreatorForm",
@@ -109,7 +128,8 @@ export default {
     LeftSide,
     ClientModal,
     Draggable,
-    FieldTemplateModal
+    FieldTemplateModal,
+    QuoteSelectionModal
   },
   data() {
     return {
@@ -124,7 +144,10 @@ export default {
       newTemplate: {},
       fieldTemplates: [],
       test: 'aaa',
-      drag: false
+      drag: false,
+      isQuoteSelectionModalOpen: false,
+      currentPaperLinkedQuotePaper: {},
+      previousLinkedPapers: []
     }
   },
   props: {
@@ -199,6 +222,27 @@ export default {
     },
     isFieldAlreadyTemplate(field) {
       return this.fieldTemplates.some(template => template.template === field.content) || !field.content
+    },
+    linkCurrentPaperToQuote(props, quote) {
+      this.currentPaperLinkedQuotePaper = quote
+      this.$set(this.content.currentPaper, 'linkedQuotePaperId', quote._id)
+      if (!this.content.currentPaper.clientId.length) {
+        this.$set(this.content.currentPaper, 'clientId', quote.clientId)
+      }
+      this.searchPreviousLinkedPapers()
+      props.close()
+    },
+    async searchPreviousLinkedPapers() {
+      /*
+        - Here we are searching for invoices that are linked to the same quote than current paper is linked to
+        - So we process an API call, with current paper 'linkedQuotePaperId' as param
+        - Call each documents with 'linkedQuotePaperId' equals to currentPaper.linkedQuotePaperId
+      */
+      const previousLinkedPapers = await this.$http.get(`/paper/getLinkedPapers/${this.content.currentPaper.linkedQuotePaperId}`)
+      this.previousLinkedPapers = previousLinkedPapers.data.filter(paper => paper.isAdvanceInvoice)
+    },
+    closeQuoteSelectionModal(props) {
+      props.close()
     }
   },
   created() {
@@ -301,19 +345,6 @@ export default {
 .ghost {
   opacity: 0.5;
 }
-
-// .flip-list-item {
-//   transition: all 1s;
-//   // display: inline-block;
-// }
-// .flip-list-enter, .flip-list-leave-to
-// /* .flip-list-leave-active below version 2.1.8 */ {
-//   opacity: 0;
-//   transform: translateX(-30px);
-// }
-// .flip-list-leave-active {
-//   position: absolute;
-// }
 
 .flip-list-move {
   transition: transform 0.5s;

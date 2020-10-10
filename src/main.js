@@ -22,7 +22,8 @@ import {
   Modal,
   Datepicker,
   Numberinput,
-  Table
+  Table,
+  Checkbox
 } from 'buefy'
 
 import '@/style/main.scss'
@@ -42,6 +43,7 @@ Vue.use(Modal)
 Vue.use(Datepicker)
 Vue.use(Numberinput)
 Vue.use(Table)
+Vue.use(Checkbox)
 
 Vue.config.productionTip = false
 
