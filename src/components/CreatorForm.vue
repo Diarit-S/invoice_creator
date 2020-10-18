@@ -42,6 +42,15 @@
                   type="is-dark"
                 )
 
+      //- If current doc is an invoice and is linked to a quote that already has linked advanced payments invoices
+      .pdf-content__right__advanced-payments(v-if="content.previousLinkedPapers.length")
+        .payment(
+          v-for="paper in content.previousLinkedPapers"
+        ) 
+          span Acompte reçu : Facture n°{{ paper.documentNumber }} 
+          span {{ totalWithoutTaxes(paper) | priceFormat }} HT
+
+
       .pdf-content__right__config
         b-button.is-info(icon-left="plus-circle-outline" @click="createNewField")
 
@@ -100,6 +109,7 @@
         quote-selection-modal(
           @selectQuote="linkCurrentPaperToQuote(props, $event)" 
           @close="closeQuoteSelectionModal(props)" 
+          :clients="content.clients"
         )
 
 </template>
@@ -119,6 +129,8 @@ import Draggable from 'vuedraggable'
 
 import QuoteSelectionModal from "@/components/QuoteSelectionModal"
 
+import { priceFormat } from '@/filters/priceFilters.js'
+
 
 
 export default {
@@ -131,6 +143,7 @@ export default {
     FieldTemplateModal,
     QuoteSelectionModal
   },
+  filters: {priceFormat},
   data() {
     return {
       isClientModalOpen: false,
@@ -146,8 +159,7 @@ export default {
       test: 'aaa',
       drag: false,
       isQuoteSelectionModalOpen: false,
-      currentPaperLinkedQuotePaper: {},
-      previousLinkedPapers: []
+      currentPaperLinkedQuotePaper: {}
     }
   },
   props: {
@@ -239,17 +251,38 @@ export default {
         - Call each documents with 'linkedQuotePaperId' equals to currentPaper.linkedQuotePaperId
       */
       const previousLinkedPapers = await this.$http.get(`/paper/getLinkedPapers/${this.content.currentPaper.linkedQuotePaperId}`)
-      this.previousLinkedPapers = previousLinkedPapers.data.filter(paper => paper.isAdvanceInvoice)
+      this.content.previousLinkedPapers = previousLinkedPapers.data.filter(paper => paper.isAdvanceInvoice)
     },
     closeQuoteSelectionModal(props) {
       props.close()
+    },
+    async hydrateCurrentPaperLinkedQuotePaper() {
+      const linkedQuote = await this.$http.get(`/paper/getPaperById/${this.content.currentPaper.linkedQuotePaperId}`)
+      const {documentNumber, clientId, creationDate} = linkedQuote.data
+      this.currentPaperLinkedQuotePaper = {documentNumber, clientId, creationDate}
+    },
+    totalWithoutTaxes(paper) {
+      return parseFloat(paper.fields.reduce((acc, currentField) => {
+        if (currentField.amount) {
+          acc += currentField.amount
+        }
+        return acc
+      }, 0).toFixed(2))
     }
   },
-  created() {
+  async created() {
     this.getLastDocumentNumberByType()
     this.getFieldTemplates()
     //- this.getLastDocumentNumber
     //- Create a watch for document type and recall getLastDocumentNumber
+    /* 
+      If current paper is an invoice and it's linked to a quote
+      We need To get some informations from this quote and hydrate currentPaperLinkedQuotePaper
+    */
+    if (this.content.currentPaper.linkedQuotePaperId) {
+      await this.hydrateCurrentPaperLinkedQuotePaper()
+      await this.searchPreviousLinkedPapers()
+    }
   },
   watch: {
     'content.currentPaper.type': function() {
@@ -277,6 +310,21 @@ export default {
       margin-left: 35px;
       >* {
         margin-right: 10px;
+      }
+    }
+
+    &__advanced-payments {
+      margin-top: 10px;
+      margin-left: 35px;
+      width: 450px;
+
+      .payment {
+        background-color: lightgrey;
+        padding: 7px;
+        border-radius: 5px;
+        font-weight: bold;
+        display: flex;
+        justify-content: space-between;
       }
     }
   }

@@ -42,6 +42,20 @@
 
     //- .html2pdf__page-break
 
+    section.advanced-payments-section(v-if="this.content.previousLinkedPapers && this.content.previousLinkedPapers.length")
+      span Acompte(s) lié(s) :
+      b-table.advanced-payments-table(
+        :data="this.content.previousLinkedPapers"
+        bordered
+        style="max-width: 795px"
+      )
+        b-table-column(field="key" width="125" v-slot="props")
+          | Facture n°{{ props.row.documentNumber }} du {{ props.row.creationDate | dateFormat }}
+
+        b-table-column(field="value" width="125" v-slot="props" style="max-width: 125px"  cell-class="right-bottom")
+          | {{ totalWithoutTaxes(props.row) | priceFormat }}
+
+
     section.under-table-section
       img(
         src="@/assets/cachet.jpg"
@@ -66,6 +80,7 @@ import moment from 'moment'
 // import _ from 'lodash'
 
 import { priceFormat } from '@/filters/priceFilters.js'
+import { dateFormat } from '@/filters/dateFormat.js'
 
 
 export default {
@@ -79,7 +94,7 @@ export default {
       defaultWorkAddress: "Identique à l'adresse client"
     }
   },
-  filters: {priceFormat},
+  filters: {priceFormat, dateFormat},
   props: {
     content: {
       type: Object,
@@ -119,6 +134,14 @@ export default {
     }
   },
   methods: {
+    totalWithoutTaxes(paper) {
+      return parseFloat(paper.fields.reduce((acc, currentField) => {
+        if (currentField.amount) {
+          acc += currentField.amount
+        }
+        return acc
+      }, 0).toFixed(2))
+    }
     // chunkArray(myArray){
     //   var results = [];
 
@@ -225,6 +248,23 @@ export default {
       td {
         border-width: 0;
       }
+    }
+  }
+}
+
+.advanced-payments-section {
+  margin-top: 1rem;
+}
+
+.advanced-payments-table {
+  &::v-deep {
+    thead {
+      display: none;
+    }
+    td:nth-of-type(2) {
+      width: 125px;
+      min-width: 125px;
+      max-width: 125px;
     }
   }
 }
