@@ -16,6 +16,7 @@
         style="display: flex; align-items: center;"
       )
         b-tag(
+          v-if="currentPaperLinkedQuotePaper.clientId"
           type="is-info" 
         ) Lié à : Devis° {{ currentPaperLinkedQuotePaper.documentNumber }} {{ clients.find(client => client._id === currentPaperLinkedQuotePaper.clientId).fullName }}
         b-checkbox(
