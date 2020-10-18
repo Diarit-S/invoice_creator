@@ -28,7 +28,8 @@ export default {
           clientId: '',
           creationDate: new Date()
         },
-        clients: []
+        clients: [],
+        previousLinkedPapers: []
       },
     }
   },
@@ -41,13 +42,28 @@ export default {
     tableFields() {
       return this.content.currentPaper.fields
     },
+    advancedPaymentsHtSum() {
+      return this.content.previousLinkedPapers.reduce((sum, currentInvoice) => {
+        sum += parseFloat(currentInvoice.fields.reduce((acc, currentField) => {
+          if (currentField.amount) {
+            acc += currentField.amount
+          }
+          return acc
+        }, 0).toFixed(2))
+        return sum
+      }, 0)
+    },
     totalWithoutTaxes() {
-      return parseFloat(this.content.currentPaper.fields.reduce((acc, currentField) => {
+      const fieldsSum = parseFloat(this.content.currentPaper.fields.reduce((acc, currentField) => {
         if (currentField.amount) {
           acc += currentField.amount
         }
         return acc
       }, 0).toFixed(2))
+      if (this.content.previousLinkedPapers && this.content.previousLinkedPapers.length) {
+        return fieldsSum - this.advancedPaymentsHtSum
+      }
+      return fieldsSum
     },
     taxeAmount() {
       return parseFloat((this.totalWithoutTaxes * (this.content.currentPaper.TVAPercent / 100)).toFixed(2))
