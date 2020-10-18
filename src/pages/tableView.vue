@@ -23,8 +23,15 @@
       :data="content.currentPaper.fields"
       bordered
       style="max-width: 795px; margin-top: 10px"
+      :row-class="(row, index) => removeBorderClass(row, index)"
     )
-      b-table-column(field="content" label="Description" width="420" v-slot="props" header-class="table-head")
+      b-table-column(
+        field="content" 
+        label="Description" 
+        width="420" 
+        v-slot="props" 
+        header-class="table-head"
+      )
         div( v-html="props.row.content")
 
       b-table-column(field="unitValue" label="Unité" width="125" v-slot="props" header-class="table-head" cell-class="right-bottom")
@@ -144,6 +151,14 @@ export default {
         }
         return acc
       }, 0).toFixed(2))
+    },
+    removeBorderClass(row, index) {
+      if (row.linkedToPreviousField) {
+        return row.linkedToPreviousField && 'no-border-top'
+      }
+      if (this.content.currentPaper.fields[index + 1] && this.content.currentPaper.fields[index + 1].linkedToPreviousField) {
+        return 'no-border-bottom'
+      }
     }
     // chunkArray(myArray){
     //   var results = [];
@@ -271,6 +286,20 @@ export default {
     }
   }
 }
+
+::v-deep {
+  .no-border-top {
+    td:first-child {
+      border-top: none;
+    }
+  }
+  .no-border-bottom {
+    td:first-child {
+      border-bottom: none;
+    }
+  }
+}
+
 
 
 </style>

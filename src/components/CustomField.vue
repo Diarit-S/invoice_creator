@@ -1,5 +1,11 @@
 <template lang="pug">
   div.custom-field
+    .link-icon(v-if="field.linkedToPreviousField")
+      b-icon(
+        icon="ethernet-cable" 
+        type="is-info"
+        size="is-medium"
+      )
     div.custom-field__infos
       div.drag-icon
         slot(name="drag")
@@ -9,6 +15,11 @@
             div(@click="copyField")
               b-icon.copy-icon(
                 icon="content-copy" 
+                type="is-dark"
+              )
+            div(@click="linkToPreviousField")
+              b-icon.cable-icon(
+                icon="cable-data" 
                 type="is-dark"
               )
             slot(name="templateBtn")
@@ -115,6 +126,11 @@ export default {
     },
     deleteField() {
       this.$emit('delete:field')
+    },
+    linkToPreviousField() {
+      this.field.linkedToPreviousField ? 
+      this.$set(this.field, 'linkedToPreviousField', false) :
+      this.$set(this.field, 'linkedToPreviousField', true)
     }
   },
   watch: {
@@ -130,6 +146,7 @@ export default {
 
 <style lang="scss" scoped>
 .custom-field {
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
@@ -203,6 +220,13 @@ export default {
     transform: translateY(-3px)
   }
 }
+.cable-icon {
+  cursor: pointer;
+  transition: transform 0.15s ease-in-out;
+  &:hover {
+    transform: translateY(-3px)
+  }
+}
 
 .delete-icon-container {
   margin-left: auto;
@@ -231,4 +255,9 @@ export default {
   pointer-events: none;
 }
 
+.link-icon {
+  position: absolute;
+  top: 5px;
+  left: 30%;
+}
 </style>
