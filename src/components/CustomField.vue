@@ -118,8 +118,7 @@ export default {
     }
   },
   watch: {
-    "field.unitPrice": function(newValue) {
-      console.log(newValue)
+    "field.unitPrice": function() {
       this.$set(this.field, "amount", this.calculatedFieldPrice);
     },
     "field.unitValue": function() {

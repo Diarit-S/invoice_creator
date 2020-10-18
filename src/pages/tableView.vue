@@ -42,10 +42,10 @@
 
     //- .html2pdf__page-break
 
-    section.advanced-payments-section(v-if="this.content.previousLinkedPapers && this.content.previousLinkedPapers.length")
+    section.advanced-payments-section(v-if="this.content.previousLinkedPapers && this.content.previousLinkedPapers.length && notHiddenPreviousLinkedPapers.length")
       span Acompte(s) lié(s) :
       b-table.advanced-payments-table(
-        :data="this.content.previousLinkedPapers"
+        :data="notHiddenPreviousLinkedPapers"
         bordered
         style="max-width: 795px"
       )
@@ -131,6 +131,9 @@ export default {
         {key: `TVA ${this.content.currentPaper.TVAPercent} %`, value: this.amountsData.taxeAmount},
         {key: 'Prix TTC', value: this.amountsData.totalAmount}
       ]
+    },
+    notHiddenPreviousLinkedPapers() {
+      return this.content.previousLinkedPapers.filter(paper => !paper.isHidden)
     }
   },
   methods: {

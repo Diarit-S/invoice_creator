@@ -43,13 +43,16 @@
                 )
 
       //- If current doc is an invoice and is linked to a quote that already has linked advanced payments invoices
-      .pdf-content__right__advanced-payments(v-if="content.previousLinkedPapers.length")
+      .pdf-content__right__advanced-payments(
+        v-if="content.previousLinkedPapers.length"
+      )
         .payment(
           v-for="paper in content.previousLinkedPapers"
-        ) 
+          @click="togglePaymentHide(paper)"
+          :class="{'hidden-payment': paper.isHidden}"
+        )
           span Acompte reçu : Facture n°{{ paper.documentNumber }} 
           span {{ totalWithoutTaxes(paper) | priceFormat }} HT
-
 
       .pdf-content__right__config
         b-button.is-info(icon-left="plus-circle-outline" @click="createNewField")
@@ -268,6 +271,9 @@ export default {
         }
         return acc
       }, 0).toFixed(2))
+    },
+    togglePaymentHide(paper) {
+      paper.isHidden ? this.$set(paper, 'isHidden', false) : this.$set(paper, 'isHidden', true)
     }
   },
   async created() {
@@ -319,6 +325,7 @@ export default {
       width: 450px;
 
       .payment {
+        cursor: pointer;
         background-color: lightgrey;
         padding: 7px;
         border-radius: 5px;
@@ -412,5 +419,9 @@ export default {
   &:hover {
     transform: translateY(-3px)
   }
+}
+
+.hidden-payment {
+  opacity: 0.5;
 }
 </style>

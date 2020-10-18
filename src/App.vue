@@ -43,14 +43,15 @@ export default {
       return this.content.currentPaper.fields
     },
     advancedPaymentsHtSum() {
-      return this.content.previousLinkedPapers.reduce((sum, currentInvoice) => {
-        sum += parseFloat(currentInvoice.fields.reduce((acc, currentField) => {
-          if (currentField.amount) {
-            acc += currentField.amount
-          }
-          return acc
-        }, 0).toFixed(2))
-        return sum
+      return this.content.previousLinkedPapers.filter(paper => !paper.isHidden)
+        .reduce((sum, currentInvoice) => {
+          sum += parseFloat(currentInvoice.fields.reduce((acc, currentField) => {
+            if (currentField.amount) {
+              acc += currentField.amount
+            }
+            return acc
+          }, 0).toFixed(2))
+          return sum
       }, 0)
     },
     totalWithoutTaxes() {
