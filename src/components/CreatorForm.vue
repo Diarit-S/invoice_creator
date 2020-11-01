@@ -9,6 +9,7 @@
       :currentPaperLinkedQuotePaper="currentPaperLinkedQuotePaper"
       @openClientModal="openClientModal"
       @openQuoteSelectionModal="isQuoteSelectionModalOpen = true"
+      @openQuoteCopyModal="isQuoteCopyModalOpen = true"
     )
 
     .pdf-content__right
@@ -115,6 +116,25 @@
           :clients="content.clients"
         )
 
+    b-modal(
+      v-model="isQuoteCopyModalOpen"
+      has-modal-card
+      trap-focus
+      :destroy-on-hide="false"
+      aria-role="dialog"
+      aria-modal
+    )
+      //- isQuoteCopyModalOpen refers to the same modal (quoteSelectionModal)
+      //- But the purpose of this modal is to copy the quote fields
+      //- So here, we pass a boolean prop to the component to specify that is for copying
+      template(#default="props")
+        quote-selection-modal(
+          isQuoteCopy
+          @copyQuote="handleCopyingQuoteSelection(props, $event)" 
+          @close="closeQuoteSelectionModal(props)" 
+          :clients="content.clients"
+        )
+
 </template>
 
 <script>
@@ -162,6 +182,7 @@ export default {
       test: 'aaa',
       drag: false,
       isQuoteSelectionModalOpen: false,
+      isQuoteCopyModalOpen: false,
       currentPaperLinkedQuotePaper: {}
     }
   },
@@ -260,6 +281,8 @@ export default {
       props.close()
     },
     async hydrateCurrentPaperLinkedQuotePaper() {
+      //- LinkedQuotePaper is a property on a paper (an invoice paper)
+      //- This property is an ID of quote paper that refers to
       const linkedQuote = await this.$http.get(`/paper/getPaperById/${this.content.currentPaper.linkedQuotePaperId}`)
       const {documentNumber, clientId, creationDate} = linkedQuote.data
       this.currentPaperLinkedQuotePaper = {documentNumber, clientId, creationDate}
@@ -273,7 +296,20 @@ export default {
       }, 0).toFixed(2))
     },
     togglePaymentHide(paper) {
+      //- This method would hide or show a linked advanced payment on final price 
       paper.isHidden ? this.$set(paper, 'isHidden', false) : this.$set(paper, 'isHidden', true)
+    },
+    async handleCopyingQuoteSelection(modal, quote) {
+      const selectedQuote = await this.$http.get(`/paper/getPaperById/${quote._id}`)
+      console.log('test', quote)
+      if (selectedQuote) {
+        console.log('selectedQuote', selectedQuote)
+        this.copyPaperFields(selectedQuote.data)
+      }
+      modal.close()
+    },
+    copyPaperFields(paper) {
+      this.$set(this.content.currentPaper, 'fields', paper.fields)
     }
   },
   async created() {
@@ -335,21 +371,6 @@ export default {
       }
     }
   }
-
-  // &__left {
-  //   position: fixed;
-  //   min-width: 400px;
-  //   max-width: 400px;
-  //   box-shadow: 0 0 20px rgba($color: gray, $alpha: 0.4);
-  //   padding: 20px;
-  //   min-height: 80vh;
-
-
-  //  .field {
-  //    max-width: 150px;
-  //    margin: 30px 0;
-  //  }
-  // }
 }
 
 .document-type {

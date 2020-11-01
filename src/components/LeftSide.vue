@@ -13,7 +13,7 @@
     )
       div(
         v-if="currentPaper.linkedQuotePaperId"
-        style="display: flex; align-items: center;"
+        style="display: flex; align-items: center; margin-bottom: 1rem"
       )
         b-tag(
           v-if="currentPaperLinkedQuotePaper.clientId"
@@ -24,7 +24,13 @@
           v-model="currentPaper.isAdvanceInvoice"
           style="margin-left: 1rem"
         ) Acompte
-      b-button.is-info(v-else @click="$emit('openQuoteSelectionModal')") Lier cette facture à un devis
+      b-button.is-info(
+        v-else 
+        @click="$emit('openQuoteSelectionModal')"
+        style="margin-bottom: 1rem"
+      ) Lier cette facture à un devis
+
+      b-button.is-info(@click="$emit('openQuoteCopyModal')") Copier un devis
 
     b-field.client
       template(#label)

@@ -12,8 +12,8 @@
           span n° {{ quote.documentNumber }}
           span {{ clientNameFromClientId(quote.clientId) }}
           span {{ creationDate(quote.creationDate) }}
-      footer.modal-card-foot
-        b-button.is-info.button(type="button" @click="$emit('createClient')") Valider
+      //- footer.modal-card-foot
+      //-   b-button.is-info.button(type="button" @click="$emit('createClient')") Valider
 </template>
 
 <script>
@@ -30,6 +30,10 @@ export default {
     clients: {
       type: Array,
       required: true
+    },
+    isQuoteCopy: {
+      type: Boolean,
+      default: false
     }
   },
   methods: {
@@ -38,7 +42,10 @@ export default {
       this.quotes = res.data
     },
     chooseQuote(quote) {
-      this.$emit('selectQuote', quote)
+      if (this.isQuoteCopy) {
+        return this.$emit('copyQuote', quote)
+      }
+        return this.$emit('selectQuote', quote)
     },
     clientNameFromClientId(clientId) {
       return this.clients.find(client => client._id === clientId).fullName

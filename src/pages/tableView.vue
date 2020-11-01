@@ -18,7 +18,6 @@
           span {{ currentClient.zipCodeAndCity }}
         .document-work-address(v-if="currentClient.workAddress !== defaultWorkAddress")
           span Adresse chantier : {{ currentClient.workAddress }}
-    //- section(v-for="section in sectionsDevidedFields" class="pdf-item")
     b-table(
       :data="content.currentPaper.fields"
       bordered
@@ -46,8 +45,6 @@
 
       b-table-column(field="amount" label="Prix HT" width="125" v-slot="props" header-class="table-head" cell-class="right-bottom")
         | {{ props.row.amount | priceFormat }}
-
-    //- .html2pdf__page-break
 
     section.advanced-payments-section(v-if="this.content.previousLinkedPapers && this.content.previousLinkedPapers.length && notHiddenPreviousLinkedPapers.length")
       span Acompte(s) lié(s) :
@@ -126,12 +123,6 @@ export default {
         return client._id === this.content.currentPaper.clientId
       }) || {}
     },
-    // sectionsDevidedFields() {
-    //   if (this.content.currentPaper.fields) {
-    //     return this.chunkArray(this.content.currentPaper.fields)
-    //   }
-    //   return []
-    // },
     amountFields() {
       return [
         {key: 'Prix HT', value: this.amountsData.totalWithoutTaxes},
@@ -160,29 +151,6 @@ export default {
         return 'no-border-bottom'
       }
     }
-    // chunkArray(myArray){
-    //   var results = [];
-
-    //   const cloneArray = _.cloneDeep(myArray);
-      
-    //   while (cloneArray.length) {
-    //       const arrayToReduce = _.cloneDeep(cloneArray)
-    //       const chunkSize = arrayToReduce.reduce((acc, currentField) => {
-    //         const newEl = document.createElement('div')
-    //         newEl.innerHTML = currentField.content
-    //         const elLength = newEl.textContent.length
-    //         acc.lengthSize += elLength
-    //         if (acc.lengthSize < 1400 && acc.size <=10) {
-    //           acc.size++
-    //         }
-    //         return acc
-    //       }, {lengthSize: 0, size: 0});
-
-    //       results.push(cloneArray.splice(0, chunkSize.size));
-    //   }
-      
-    //   return results;
-    // }
   }
 }
 </script>
