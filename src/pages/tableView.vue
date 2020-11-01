@@ -144,12 +144,14 @@ export default {
       }, 0).toFixed(2))
     },
     removeBorderClass(row, index) {
+      const classesToApply = []
       if (row.linkedToPreviousField) {
-        return row.linkedToPreviousField && 'no-border-top'
+        classesToApply.push(row.linkedToPreviousField && 'no-border-top')
       }
       if (this.content.currentPaper.fields[index + 1] && this.content.currentPaper.fields[index + 1].linkedToPreviousField) {
-        return 'no-border-bottom'
+        classesToApply.push('no-border-bottom')
       }
+      return classesToApply
     }
   }
 }
