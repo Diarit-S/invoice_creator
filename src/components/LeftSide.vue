@@ -42,12 +42,18 @@
               size="is-small" 
               type="is-info"
             )
-      b-select(placeholder="Client" v-model="currentPaper.clientId")
-        option(
-          v-for="client in clients"
-          :value="client._id"
-          :key="client._id"
-        ) {{ client.fullName }}
+      //- b-select(placeholder="Client" v-model="currentPaper.clientId")
+      //-   option(
+      //-     v-for="client in clients"
+      //-     :value="client._id"
+      //-     :key="client._id"
+      //-   ) {{ client.fullName }}
+
+      v-select(
+        :options="clientsForSelection"
+        @input="selectClient"
+        style="min-width: 200px"
+      )
       p(v-if="selectedClient") {{ selectedClient.address }}
 
     b-field( label="Date")
@@ -145,6 +151,9 @@ export default {
       const lastNumber = await this.$http.get(`/paper/getLastNumberOfType/${this.currentPaper.type}`)
       this.$set(this.currentPaper, 'documentNumber', lastNumber.data.documentNumber + 1)
     },
+    selectClient(client) {
+      this.currentPaper.clientId = client.code
+    }
   },
   computed: {
     isNewPaper() {
@@ -155,6 +164,14 @@ export default {
     },
     translatedCurrentPaperType() {
       return this.possibleTypes.find(type => type.key === this.currentPaper.type).value.toUpperCase()
+    },
+    clientsForSelection() {
+      return this.clients.map(client => {
+        return {
+          label: client.fullName, 
+          code: client._id
+        }
+      })
     }
   },
   created() {

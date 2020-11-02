@@ -6,6 +6,11 @@ import router from './router'
 import axios from "axios"
 import axiosSetup from "@/utils/axios-setup"
 
+import vSelect from 'vue-select'
+
+Vue.component('v-select', vSelect)
+import 'vue-select/dist/vue-select.css';
+
 import moment from 'moment'
 
 moment.locale('fr')

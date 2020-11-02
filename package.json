@@ -25,6 +25,7 @@
     "vue": "^2.6.11",
     "vue-html2pdf": "^1.6.6",
     "vue-router": "^3.4.5",
+    "vue-select": "^3.10.8",
     "vuedraggable": "^2.24.1"
   },
   "devDependencies": {
