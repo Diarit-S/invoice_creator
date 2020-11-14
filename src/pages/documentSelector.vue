@@ -1,13 +1,5 @@
 <template lang="pug">
   div.document-selector
-    //- .document-selector__document(
-    //-   v-for="document in documents" 
-    //-   :key="document._id"
-    //-   @click="editDocument(document._id)"
-    //- )
-    //-   span {{ documentLabels[$route.params.type] }} n° {{ document.documentNumber }}
-    //-   span {{ clientNameFromClientId(document.clientId) }}
-    //-   span {{ creationDate(document.creationDate) }}
 
     b-table(
       :data="tableData"
@@ -19,6 +11,7 @@
         width="100" 
         v-slot="props" 
         searchable
+        sortable
       )
         | {{ props.row.documentNumber }}
 
@@ -37,8 +30,10 @@
         width="397" 
         v-slot="props" 
         searchable
+        sortable
+        :custom-search="searchOnDate"
       )
-        | {{ props.row.creationDate }}
+        | {{ creationDate(props.row.creationDate) }}
 
       b-table-column(
         width="100" 
@@ -79,7 +74,7 @@ export default {
         return {
           _id: document._id,
           client: this.clientNameFromClientId(document.clientId),
-          creationDate: this.creationDate(document.creationDate),
+          creationDate: document.creationDate,
           documentNumber: document.documentNumber
         }
       })
@@ -98,8 +93,12 @@ export default {
     },
     clientNameFromClientId(clientId) {
       return this.content.clients.find(client => client._id === clientId).fullName
+    },
+    searchOnDate(a, b) {
+      console.log(a, b)
+      return this.creationDate(a.creationDate).search(b) >= 0
     }
-  },
+  }, 
   mounted() {
     this.getAllDocumentOfType()
   }
