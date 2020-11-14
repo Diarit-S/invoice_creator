@@ -42,19 +42,15 @@
               size="is-small" 
               type="is-info"
             )
-      //- b-select(placeholder="Client" v-model="currentPaper.clientId")
-      //-   option(
-      //-     v-for="client in clients"
-      //-     :value="client._id"
-      //-     :key="client._id"
-      //-   ) {{ client.fullName }}
 
       v-select(
         :options="clientsForSelection"
         @input="selectClient"
         style="min-width: 200px"
       )
-      p(v-if="selectedClient") {{ selectedClient.address }}
+      template(v-if="selectedClient")
+        p {{ selectedClient.address }}
+        p {{ selectedClient.zipCodeAndCity }}
 
     b-field( label="Date")
       b-datepicker(
@@ -221,10 +217,16 @@ export default {
 
 .client {
   &::v-deep {
+    max-width: 320px !important;
+
+    .field-body {
+      width: 100%;
+    }
     .field.has-addons {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
+      width: 100%;
     }
   }
 }

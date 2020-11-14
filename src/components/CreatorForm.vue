@@ -61,6 +61,7 @@
         b-dropdown(
           aria-role="list"
           @change="createNewFieldWidhTemplate"
+          v-if="isModelDropdownEnable"
         )
           template(#trigger)
             button.button.is-info Model
@@ -183,7 +184,9 @@ export default {
       drag: false,
       isQuoteSelectionModalOpen: false,
       isQuoteCopyModalOpen: false,
-      currentPaperLinkedQuotePaper: {}
+      currentPaperLinkedQuotePaper: {},
+      //-- This data is made to reload dropdown component
+      isModelDropdownEnable: true
     }
   },
   props: {
@@ -255,6 +258,10 @@ export default {
     },
     createNewFieldWidhTemplate(content) {
       this.content.currentPaper.fields.push({content, unit: 'm²'});
+      this.isModelDropdownEnable = false
+      setTimeout(() => {
+        this.isModelDropdownEnable = true
+      }, 10);
     },
     isFieldAlreadyTemplate(field) {
       return this.fieldTemplates.some(template => template.template === field.content) || !field.content
