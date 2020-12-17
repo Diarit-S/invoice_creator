@@ -28,7 +28,8 @@
                 icon="close-circle-outline" 
                 type="is-danger"
               )
-        editor(
+        editor.editor(
+          ref="editor"
           v-model="field.content"
           :init="tinyConfig"
         )
@@ -131,7 +132,14 @@ export default {
       this.field.linkedToPreviousField ? 
       this.$set(this.field, 'linkedToPreviousField', false) :
       this.$set(this.field, 'linkedToPreviousField', true)
+    },
+    initSpellChecker() {
+      const editor = this.$refs.editor.element
+      editor.setAttribute("spellcheck", true)
     }
+  },
+  mounted() {
+    this.initSpellChecker() 
   },
   watch: {
     "field.unitPrice": function() {
