@@ -218,15 +218,6 @@ export default {
     closeClientModal(props) {
       props.close()
     },
-    async getLastDocumentNumber() {
-      const lastDocumentNumber = await this.$http.get(`/paper/getLastNumber/${this.content.currentPaper.type}`)
-      //- .data ....
-      this.content.currentPaper.documentNumber = lastDocumentNumber
-    },
-    async getLastDocumentNumberByType() {
-      const lastNumber = await this.$http.get(`/paper/getLastNumberOfType/${this.content.currentPaper.type}`)
-      console.log(lastNumber)
-    },
     openClientModal() {
       this.isClientModalOpen = true
     },
@@ -316,10 +307,7 @@ export default {
     }
   },
   async created() {
-    this.getLastDocumentNumberByType()
     this.getFieldTemplates()
-    //- this.getLastDocumentNumber
-    //- Create a watch for document type and recall getLastDocumentNumber
     /* 
       If current paper is an invoice and it's linked to a quote
       We need To get some informations from this quote and hydrate currentPaperLinkedQuotePaper
@@ -327,11 +315,6 @@ export default {
     if (this.content.currentPaper.linkedQuotePaperId) {
       await this.hydrateCurrentPaperLinkedQuotePaper()
       await this.searchPreviousLinkedPapers()
-    }
-  },
-  watch: {
-    'content.currentPaper.type': function() {
-      this.getLastDocumentNumberByType()
     }
   }
 };
