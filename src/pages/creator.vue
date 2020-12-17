@@ -4,15 +4,11 @@
       :content="content" 
       :amountsData="amountsData"
     ></creator-form>
-    <img src="@/assets/drita_infos.jpg" style="visibility: hidden" ref="test"/>
   </div>
 </template>
 
 <script>
 import CreatorForm from '../components/CreatorForm'
-
-// import { jsPDF } from 'jspdf'
-// import 'jspdf-autotable'
 
 export default {
   name: 'Creator',

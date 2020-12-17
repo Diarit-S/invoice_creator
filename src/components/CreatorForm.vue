@@ -141,9 +141,7 @@
 <script>
 
 import CustomField from "./CustomField";
-
 import LeftSide from "./LeftSide";
-
 import ClientModal from './ClientModal'
 import FieldTemplateModal from './FieldTemplateModal'
 
@@ -180,7 +178,6 @@ export default {
       },
       newTemplate: {},
       fieldTemplates: [],
-      test: 'aaa',
       drag: false,
       isQuoteSelectionModalOpen: false,
       isQuoteCopyModalOpen: false,
@@ -308,7 +305,6 @@ export default {
     },
     async handleCopyingQuoteSelection(modal, quote) {
       const selectedQuote = await this.$http.get(`/paper/getPaperById/${quote._id}`)
-      console.log('test', quote)
       if (selectedQuote) {
         console.log('selectedQuote', selectedQuote)
         this.copyPaperFields(selectedQuote.data)
