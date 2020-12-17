@@ -30,6 +30,21 @@
         style="margin-bottom: 1rem"
       ) Lier cette facture à un devis
 
+      b-field(
+        v-if="currentPaper.isAdvanceInvoice"
+      )
+        b-numberinput(
+          :controls="false" 
+          v-model="currentPaperAdvancedPaymentPercent"
+          step="0.01"
+        )
+        p.controls
+          b-button.button.is-success(@click="$emit('applyAdvancedPaymentPercent', currentPaperAdvancedPaymentPercent)")
+            b-icon(
+              icon="check"
+            )
+
+      //- @TODO Display this button below conditionnaly (if there is no advance payment field)
       b-button.is-info(@click="$emit('openQuoteCopyModal')") Copier un devis
 
     b-field.client
@@ -109,7 +124,8 @@ export default {
           key: "quote",
           value: 'Devis'
         }
-      ]
+      ],
+      currentPaperAdvancedPaymentPercent: null
     };
   },
   props: {

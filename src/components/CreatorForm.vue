@@ -10,6 +10,7 @@
       @openClientModal="openClientModal"
       @openQuoteSelectionModal="isQuoteSelectionModalOpen = true"
       @openQuoteCopyModal="isQuoteCopyModalOpen = true"
+      @applyAdvancedPaymentPercent="applyAdvancedPaymentPercent($event)"
     )
 
     .pdf-content__right
@@ -153,6 +154,8 @@ import QuoteSelectionModal from "@/components/QuoteSelectionModal"
 
 import { priceFormat } from '@/filters/priceFilters.js'
 
+import { dateFormat } from '@/filters/dateFormat'
+
 
 
 export default {
@@ -257,6 +260,7 @@ export default {
     linkCurrentPaperToQuote(props, quote) {
       this.currentPaperLinkedQuotePaper = quote
       this.$set(this.content.currentPaper, 'linkedQuotePaperId', quote._id)
+      //- Extact the client from the quote and set it on the current paper
       if (!this.content.currentPaper.clientId.length) {
         this.$set(this.content.currentPaper, 'clientId', quote.clientId)
       }
@@ -304,6 +308,12 @@ export default {
     },
     copyPaperFields(paper) {
       this.$set(this.content.currentPaper, 'fields', paper.fields)
+    },
+    applyAdvancedPaymentPercent(percent) {
+      const advancePaymentAmount = this.currentPaperLinkedQuotePaper.amount * percent / 100
+      const content = `<p><strong>Facture d&apos;acompte</strong></p><p><br></p><p>Les travaux sont d&eacute;crits sur le devis n&deg; ${this.currentPaperLinkedQuotePaper.documentNumber} dat&eacute; du ${dateFormat(this.currentPaperLinkedQuotePaper.creationDate)}.&nbsp;</p><p><br></p><p>Le montant du devis est de ${priceFormat(this.currentPaperLinkedQuotePaper.amount)} &euro; HT.&nbsp;</p><p><br></p><p>L&apos;acompte demand&eacute; est de ${percent}% du montant du devis, soit <strong>${priceFormat(advancePaymentAmount)} HT</strong></p>`
+      this.$set(this.content.currentPaper, 'fields', [{content, unit: 'U', unitPrice: advancePaymentAmount}])
+      // this.content.currentPaper.fields.push({content, unit: 'U', unitPrice: advancePaymentAmount});
     }
   },
   async created() {
