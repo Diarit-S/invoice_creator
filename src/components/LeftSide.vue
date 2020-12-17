@@ -49,8 +49,9 @@
         style="min-width: 200px"
       )
       template(v-if="selectedClient")
-        p {{ selectedClient.address }}
-        p {{ selectedClient.zipCodeAndCity }}
+        b-tag(style="margin: 0.3rem 0;" size="is-medium") {{ selectedClient.address }}
+        b-tag(style="margin: 0.1rem 0;" size="is-medium") {{ selectedClient.zipCodeAndCity }}
+        b-tag(style="margin: 0.1rem 0;" size="is-medium") {{ 'Chantier: ' + selectedClient.workAddress }}
 
     b-field( label="Date")
       b-datepicker(
