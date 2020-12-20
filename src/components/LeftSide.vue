@@ -100,12 +100,16 @@
       b-field.price-field(label="Total TTC")
         b-tag(type="is-warning is-light" size="is-large") {{ amountsData.totalAmount }} €
 
-    b-button.is-success.pdf-btn(v-if="isNewPaper" @click="createPaper" ) Créer
-    b-button.is-success.pdf-btn(v-else @click="updatePaper" )  Mettre à jour
-
+    div.end-buttons
+      b-button.is-success(v-if="isNewPaper" @click="createPaper" ) Créer
+      b-button.is-success(v-else @click="updatePaper" )  Mettre à jour
+      b-button(
+        v-if="currentPaper.clientId && currentClientEmail"
+        tag="router-link" 
+        :to="{name: 'sendEmail', params: {email: currentClientEmail}}" 
+        target="_blank"
+      ) Envoyer email
     
-
-
 </template>
 
 <script>
@@ -190,6 +194,11 @@ export default {
           code: client._id
         }
       })
+    },
+    currentClientEmail() {
+      return this.clients.find(client => {
+        return client._id === this.currentPaper.clientId
+      }).email
     }
   },
   created() {
@@ -296,8 +305,12 @@ export default {
   margin: auto;
 }
 
-.pdf-btn {
-  left: 50%;
-  transform: translate(-50%, 100%);
+.end-buttons {
+  display: flex;
+  justify-content: center;
+
+  >* {
+    margin: 0.5rem;
+  } 
 }
 </style>
