@@ -106,7 +106,7 @@
       b-button(
         v-if="currentPaper.clientId && currentClientEmail"
         tag="router-link" 
-        :to="{name: 'sendEmail', params: {email: currentClientEmail}}" 
+        :to="{name: 'sendEmail', params: {email: currentClientEmail, docType: currentPaper.type, clientName: selectedClient.fullName, clientAddress: currentClientWorkAddress, familiar: false}}" 
         target="_blank"
       ) Envoyer email
     
@@ -199,6 +199,9 @@ export default {
       return this.clients.find(client => {
         return client._id === this.currentPaper.clientId
       }).email
+    },
+    currentClientWorkAddress() {
+      return this.selectedClient.workAddress === "Identique à l'adresse client" ? this.selectedClient.address : this.selectedClient.workAddress
     }
   },
   created() {
