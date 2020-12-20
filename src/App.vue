@@ -3,6 +3,7 @@
     <router-view
       :content="content"
       :amountsData="amountsData"
+      @reloadClients="getClients()"
     ></router-view>
   </div>
 </template>

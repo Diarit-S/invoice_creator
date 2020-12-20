@@ -3,6 +3,7 @@
     <creator-form 
       :content="content" 
       :amountsData="amountsData"
+      @reloadClients="$emit('reloadClients')"
     ></creator-form>
   </div>
 </template>

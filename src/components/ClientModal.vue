@@ -20,7 +20,16 @@
           b-input(v-model="newClient.workAddress" autocomplete="off")
 
       footer.modal-card-foot
-        b-button.is-info.button(type="button" @click="$emit('createClient')") Valider
+        b-button.is-info.button(
+          v-if="isUpdate"
+          type="button" 
+          @click="$emit('updateClient', newClient)"
+        ) Mettre à jour
+        b-button.is-info.button(
+          v-else
+          type="button" 
+          @click="$emit('createClient')"
+        ) Valider
           
 </template>
 
@@ -31,6 +40,10 @@ export default {
     newClient: {
       type: Object,
       required: true
+    },
+    isUpdate: {
+      type: Boolean,
+      defailt: false
     }
   }
 }

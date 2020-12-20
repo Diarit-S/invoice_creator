@@ -8,6 +8,7 @@
       :clients="content.clients"
       :currentPaperLinkedQuotePaper="currentPaperLinkedQuotePaper"
       @openClientModal="openClientModal"
+      @openEditClientModal="openEditClientModal"
       @openQuoteSelectionModal="isQuoteSelectionModalOpen = true"
       @openQuoteCopyModal="isQuoteCopyModalOpen = true"
       @applyAdvancedPaymentPercent="applyAdvancedPaymentPercent($event)"
@@ -87,6 +88,24 @@
           @createClient="createClient(props)" 
           @close="closeClientModal(props)" 
         )
+
+    //- Edit client modal   
+    b-modal(
+      v-model="isEditClientModalOpen"
+      has-modal-card
+      trap-focus
+      :destroy-on-hide="false"
+      aria-role="dialog"
+      aria-modal
+    )
+      template(#default="props")
+        client-modal(
+          :newClient="selectedClientCopy()"
+          isUpdate
+          @updateClient="updateClient(props, $event)" 
+          @close="closeClientModal(props)" 
+        )
+
 
     b-modal(
       v-model="isFieldTemplateModalOpen"
@@ -172,6 +191,7 @@ export default {
   data() {
     return {
       isClientModalOpen: false,
+      isEditClientModalOpen: false,
       isFieldTemplateModalOpen: false,
       newClient: {
         fullName: '',
@@ -207,7 +227,10 @@ export default {
         disabled: false,
         ghostClass: "ghost"
       }
-    }
+    },
+    selectedClient() {
+      return this.content.clients.find(client => client._id === this.content.currentPaper.clientId)
+    },
   },
   methods: {
     createNewField() {
@@ -218,11 +241,19 @@ export default {
       props.close()
       this.content.clients.push(newClient.data)
     },
+    async updateClient(props, clientWithUpdates) {
+      await this.$http.post('/client/updateClient', clientWithUpdates) 
+      this.$emit('reloadClients')
+      props.close()
+    },
     closeClientModal(props) {
       props.close()
     },
     openClientModal() {
       this.isClientModalOpen = true
+    },
+    openEditClientModal() {
+      this.isEditClientModalOpen = true
     },
     copyField(field, index) {
       this.content.currentPaper.fields.splice(index + 1, 0, _.cloneDeep(field))
@@ -314,6 +345,9 @@ export default {
       const content = `<p><strong>Facture d&apos;acompte</strong></p><p><br></p><p>Les travaux sont d&eacute;crits sur le devis n&deg; ${this.currentPaperLinkedQuotePaper.documentNumber} dat&eacute; du ${dateFormat(this.currentPaperLinkedQuotePaper.creationDate)}.&nbsp;</p><p><br></p><p>Le montant du devis est de ${priceFormat(this.currentPaperLinkedQuotePaper.amount)} HT.&nbsp;</p><p><br></p><p>L&apos;acompte demand&eacute; est de ${percent}% du montant du devis, soit <strong>${priceFormat(advancePaymentAmount)} HT</strong></p>`
       this.$set(this.content.currentPaper, 'fields', [{content, unit: 'U', unitPrice: advancePaymentAmount}])
       // this.content.currentPaper.fields.push({content, unit: 'U', unitPrice: advancePaymentAmount});
+    },
+    selectedClientCopy() {
+      return _.cloneDeep(this.selectedClient)
     }
   },
   async created() {

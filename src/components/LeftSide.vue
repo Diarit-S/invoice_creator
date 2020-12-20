@@ -63,11 +63,19 @@
               type="is-info"
             )
 
-      v-select(
-        :options="clientsForSelection"
-        @input="selectClient"
-        style="min-width: 200px"
-      )
+      div(style="display: flex")
+        v-select(
+          :options="clientsForSelection"
+          @input="selectClient"
+          style="min-width: 200px"
+        )
+        div.update-client-button(v-if="selectedClient" @click="openEditClientModal")
+          b-icon.client-plus-icon(
+            icon="pencil" 
+            type="is-info"
+          )
+        
+
       template(v-if="selectedClient")
         b-tag(style="margin: 0.3rem 0;" size="is-medium") {{ selectedClient.address }}
         b-tag(style="margin: 0.1rem 0;" size="is-medium") {{ selectedClient.zipCodeAndCity }}
@@ -158,6 +166,9 @@ export default {
   methods: {
     openClientModal() {
       this.$emit('openClientModal')
+    },
+    openEditClientModal() {
+      this.$emit('openEditClientModal')
     },
     async createPaper() {
       await this.$http.post('/paper/createPaper', this.currentPaper) 
@@ -299,6 +310,14 @@ export default {
     margin-left: 8px;
   }
 }
+
+
+
+.update-client-button {
+  cursor: pointer;
+  margin-left: 8px;
+}
+
 
 .client-modal-container {
   border-radius: 6px;
