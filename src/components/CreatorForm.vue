@@ -423,7 +423,7 @@ export default {
 }
 
 .drag-icon {
-  cursor: grab;
+  cursor: move;
   transition: transform 0.15s ease-in-out;
   &:hover {
     transform: translateY(-3px)
