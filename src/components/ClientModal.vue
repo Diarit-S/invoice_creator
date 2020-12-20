@@ -10,6 +10,8 @@
       section.modal-card-body
         b-field(label="Nom et Prénom" label-position="on-border" autocomplete="off")
           b-input(v-model="newClient.fullName" autocomplete="off")
+        b-field(label="Email" label-position="on-border" autocomplete="off")
+          b-input(v-model="newClient.email" autocomplete="off")
         b-field(label="Adresse" label-position="on-border" autocomplete="off")
           b-input(v-model="newClient.address" autocomplete="off")
         b-field(label="Code postale et ville" label-position="on-border" autocomplete="off")
