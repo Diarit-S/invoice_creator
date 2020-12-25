@@ -225,7 +225,8 @@ export default {
         animation: 200,
         group: "description",
         disabled: false,
-        ghostClass: "ghost"
+        ghostClass: "ghost",
+        chosenClass: "handled-elt"
       }
     },
     selectedClient() {
@@ -449,7 +450,14 @@ export default {
 }
 
 .ghost {
-  opacity: 0.5;
+  opacity: 0.2;
+  // border: 2px dashed;
+  // position: relative;
+  // background-color: #edf5ff96;
+}
+
+.handled-elt {
+  background-color: #edf5ff96;
 }
 
 .flip-list-move {
