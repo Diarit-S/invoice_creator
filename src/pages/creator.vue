@@ -45,7 +45,9 @@ export default {
 <style lang="scss" scoped>
 
 #creator {
-  margin-top: 10px;
-  padding: 20px;
+  padding: 30px 20px;
+  min-height: 100vh;
+  height: fit-content;
+  background-color: #edf5ff96;
 }
 </style>

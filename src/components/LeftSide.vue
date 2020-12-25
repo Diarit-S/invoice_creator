@@ -235,6 +235,7 @@ export default {
   min-width: 400px;
   max-width: 400px;
   box-shadow: 0 0 20px 5px rgba($color: gray, $alpha: 0.2);
+  background-color: white;
   padding: 20px;
   border-radius: 0 20px 20px 0;
   height: 100vh;
