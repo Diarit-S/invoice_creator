@@ -1,11 +1,19 @@
 <template lang="pug">
   .pdf-content__left
-    b-field.document-type(label="Type de document")
-      b-select(placeholder="Type de document" v-model="currentPaper.type")
-        option(v-for="type in possibleTypes" :value="type.key" :key="type.key")
-          | {{ type.value }}
-      p.control
-        span.button.is-static n° {{ currentPaper.documentNumber }}
+    .date-and-type
+      b-field.document-type()
+        b-select(placeholder="Type de document" v-model="currentPaper.type")
+          option(v-for="type in possibleTypes" :value="type.key" :key="type.key")
+            | {{ type.value }}
+        p.control
+          span.button.is-static n° {{ currentPaper.documentNumber }}
+
+      b-field()
+        b-datepicker(
+          v-model="currentPaper.creationDate"
+          placeholder="Selectionner une date"
+          icon="calendar-today"
+        )
 
     div(
       v-if="currentPaper.type === 'invoice'"
@@ -26,6 +34,7 @@
         ) Acompte
       b-button.is-info(
         v-else 
+        size="is-small"
         @click="$emit('openQuoteSelectionModal')"
         style="margin-bottom: 1rem"
       ) Lier cette facture à un devis
@@ -39,17 +48,20 @@
             :controls="false" 
             v-model="currentPaperAdvancedPaymentPercent"
             step="0.01"
+            size="is-small"
           )
           p.controls
-            b-button.button.is-success(@click="$emit('applyAdvancedPaymentPercent', currentPaperAdvancedPaymentPercent)")
+            b-button.button.is-success(@click="$emit('applyAdvancedPaymentPercent', currentPaperAdvancedPaymentPercent)" size="is-small")
               b-icon(
+                size="is-small"
                 icon="check"
               )
 
         //- @TODO Display this button below conditionnaly (if there is no advance payment custom field)
         b-button.is-info(
           @click="$emit('openQuoteCopyModal')"
-          style="margin-left: 1rem"
+          size="is-small"
+          :style="currentPaper.isAdvanceInvoice ? {marginLeft: '1rem'} : {}"
         ) Copier un devis
 
     b-field.client
@@ -81,12 +93,6 @@
         b-tag(style="margin: 0.1rem 0;" size="is-medium") {{ selectedClient.zipCodeAndCity }}
         b-tag(style="margin: 0.1rem 0;" size="is-medium") {{ 'Chantier: ' + selectedClient.workAddress }}
 
-    b-field( label="Date")
-      b-datepicker(
-        v-model="currentPaper.creationDate"
-        placeholder="Selectionner une date"
-        icon="calendar-today"
-      )
     div.price-container
       b-field.price-field( label="Total HT")
         b-tag(type="is-info is-light" size="is-large") {{ amountsData.totalWithoutTaxes }} €
@@ -231,16 +237,18 @@ export default {
 <style lang="scss" scoped>
 
 .pdf-content__left {
+
   position: fixed;
   min-width: 400px;
   max-width: 400px;
-  box-shadow: 0 0 20px 5px rgba($color: gray, $alpha: 0.2);
-  background-color: white;
+  box-shadow: 0 0 20px 5px rgba(128, 128, 128, 0.2);
+  background-color: #ffffff66;
   padding: 20px;
-  border-radius: 0 20px 20px 0;
-  height: 100vh;
-  top: 0;
-  left: 0;
+  border-radius: 10px;
+  height: 80vh;
+  top: 50%;
+  left: 20px;
+  transform: translateY(calc(-50% - 12px));
 
   .field {
     max-width: 150px;
@@ -335,5 +343,10 @@ export default {
   >* {
     margin: 0.5rem;
   } 
+}
+
+.date-and-type {
+  display: flex;
+  justify-content: space-between;
 }
 </style>
