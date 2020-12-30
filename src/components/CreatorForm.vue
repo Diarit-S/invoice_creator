@@ -58,15 +58,30 @@
           span {{ totalWithoutTaxes(paper) | priceFormat }} HT
 
       .pdf-content__right__config
-        b-button.is-info(icon-left="plus-circle-outline" @click="createNewField")
+        b-button.is-info.dashed-button(@click="createNewField")
+          span(style="display: flex; align-items: center; font-weight: bold") 
+            b-icon(
+              icon="plus"
+              style="margin-right: 10px; font"
+            )
+            | Ajouter un champ
 
-        b-dropdown(
+
+        b-dropdown.dashed-dropdown(
           aria-role="list"
           @change="createNewFieldWidhTemplate"
           v-if="isModelDropdownEnable"
+          :position="content.currentPaper.fields.length > 5 ? 'is-top-right' : 'is-bottom-right'"
         )
           template(#trigger)
-            button.button.is-info Model
+            button.button.is-info
+              span(style="display: flex; align-items: center; font-weight: bold") 
+                b-icon(
+                  icon="layers-outline"
+                  style="margin-right: 10px; font"
+                )
+                | Utiliser un model
+
           b-dropdown-item(
             v-for="template in fieldTemplates"
             aria-role="listitem"
@@ -378,11 +393,49 @@ export default {
 
     &__config {
       display: flex;
+      flex-direction: column;
       justify-content: flex-start;
-      margin-top: 10px;
+      margin-top: 30px;
       margin-left: 35px;
+      width: 450px;
       >* {
-        margin-right: 10px;
+        margin-bottom: 10px;
+      }
+
+      .dashed-button {
+        background-color: rgba(255, 255, 255, 0.849);
+        border: 2px dashed rgb(163, 163, 163);
+        color: rgb(163, 163, 163);
+        transition: border-color 0.15s ease-in-out, color 0.15s ease-in-out;
+
+        &:hover {
+          border-color: rgb(92, 92, 92);
+          color: rgb(90, 90, 90);
+        }
+      }
+      .dashed-dropdown {
+        position: relative;
+        &::v-deep {
+          .dropdown-trigger {
+            width: 100%;
+            .button {
+              width: 100% !important;
+              background-color: rgba(255, 255, 255, 0.849);
+              border: 2px dashed rgb(163, 163, 163);
+              color: rgb(163, 163, 163);
+              transition: border-color 0.15s ease-in-out, color 0.15s ease-in-out;
+              font-weight: bold;
+
+              &:hover {
+                border-color: rgb(92, 92, 92);
+                color: rgb(90, 90, 90);
+              }
+            }
+          }
+          .dropdown-menu {
+            width: 100%;
+          }
+        }
       }
     }
 
