@@ -29,6 +29,7 @@
             v-for="(field, index) in content.currentPaper.fields"
             :key="'field' + index"
             :field="field"
+            :ref="'field' + index"
             @copy:field='copyField(field, index)'
             @delete:field='deleteField(field, index)'
             :drag="drag"
@@ -249,8 +250,16 @@ export default {
     },
   },
   methods: {
-    createNewField() {
-      this.content.currentPaper.fields.push({unit: 'm²'});
+    async createNewField() {
+      await this.content.currentPaper.fields.push({unit: 'm²'});
+      //- Set the focus on the new field
+      // console.log(this.$refs[`field${this.content.currentPaper.fields.length - 2}`][0].$el.querySelector('.editor').classList.remove('mce-edit-focus')
+      const previousTox = document.querySelectorAll('.tox-tinymce')
+      await previousTox.forEach(tox => {
+        tox.style.display = 'none'
+      });
+      this.$refs[`field${this.content.currentPaper.fields.length - 1}`][0].$el.querySelector('.editor').focus()
+      // .children[0].children[1].children[1].focus()
     },
     async createClient(props) {
       const newClient = await this.$http.post('/client/createClient', this.newClient) 
@@ -364,6 +373,13 @@ export default {
     },
     selectedClientCopy() {
       return _.cloneDeep(this.selectedClient)
+    },
+    setShortcuts() {
+      document.addEventListener('keyup', (e) => {
+        if (e.ctrlKey && e.code === 'Space') {
+          this.createNewField()
+        }
+      }, false);
     }
   },
   async created() {
@@ -376,6 +392,7 @@ export default {
       await this.hydrateCurrentPaperLinkedQuotePaper()
       await this.searchPreviousLinkedPapers()
     }
+    this.setShortcuts()
   }
 };
 </script>
