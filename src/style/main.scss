@@ -48,6 +48,10 @@
     background-color: #363630;
     color: white !important;
     border-width: 0 !important;
+
+    >div {
+        justify-content: center;
+    }
 }
 
 .price-table thead {
